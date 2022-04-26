@@ -43,7 +43,9 @@ public class Entrance {
             }
         } else {
             Children nextChild = entranceQueue.poll();
-            //Need to add method for the kid to enter common areas
+            
+            //Need to add method here for the kid to enter common areas
+            
             nextKidIn.signal();
         }
     }
