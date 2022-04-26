@@ -11,9 +11,9 @@ package Main;
  */
 public class Children extends Thread {
     
-    private int id;
+    private String id;
     
     public Children(int startid) {
-        this.id = startid;
+        this.id = "N" + String.format("%04d", startid);
     }
 }
