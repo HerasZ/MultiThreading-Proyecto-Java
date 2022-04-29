@@ -30,12 +30,12 @@ public class Entrance {
         nextKidIn = campLock.newCondition();
     }
 
-    private void enterQueue(Children child) {
+    public void enterQueue(Children child) {
         entranceQueue.add(child);
     }
 
-    private void enterCamp() {
-        if (capacity == 50 || !open) {
+    public void enterCamp() {
+        if (capacity >= 50 || !open) {
             try {
                 nextKidIn.wait();
             } catch (InterruptedException ex) {
@@ -50,7 +50,7 @@ public class Entrance {
         }
     }
     
-    private void openDoors() {
+    public void openDoors() {
         try {
             sleep((int)(50 + 50 * Math.random()));
         } catch (InterruptedException ex) {
