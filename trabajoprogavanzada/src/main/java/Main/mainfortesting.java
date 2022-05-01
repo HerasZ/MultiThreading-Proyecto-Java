@@ -15,8 +15,9 @@ public class mainfortesting {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Entrance entrance1 = new Entrance(0);
-        Entrance entrance2 = new Entrance(0);
+        CommonArea common = new CommonArea();
+        Entrance entrance1 = new Entrance(0,common);
+        Entrance entrance2 = new Entrance(0,common);
         Children childtest = new Children(0,entrance1,entrance2);
         
         childtest.run();

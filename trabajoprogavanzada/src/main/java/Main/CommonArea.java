@@ -15,4 +15,8 @@ public class CommonArea {
     
     private LinkedBlockingQueue<Children> commonAreaChildren = new LinkedBlockingQueue<Children>();
     private LinkedBlockingQueue<Instructor> commonAreaInstructors = new LinkedBlockingQueue<Instructor>();
+    
+    public void enterChildren(Children newChild) {
+        commonAreaChildren.add(newChild);
+    }
 }

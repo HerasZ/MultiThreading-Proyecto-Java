@@ -19,12 +19,15 @@ import java.util.logging.Logger;
 public class Entrance {
 
     private LinkedBlockingQueue<Children> entranceQueue = new LinkedBlockingQueue<Children>();
+    private CommonArea commonArea;
     private boolean open = false;
+    //TODO: Replace with atomic integer 
     private int capacity;
     private ReentrantLock campLock;
     private Condition nextKidIn;
 
-    public Entrance(int capacity) {
+    public Entrance(int capacity,CommonArea newCommonArea) {
+        this.commonArea = newCommonArea;
         this.capacity = capacity;
         this.campLock = new ReentrantLock(true);
         nextKidIn = campLock.newCondition();
@@ -43,9 +46,8 @@ public class Entrance {
             }
         } else {
             Children nextChild = entranceQueue.poll();
-
-            //Need to add method here for the kid to enter common areas
-            
+            commonArea.enterChildren(nextChild);
+            capacity++;
             nextKidIn.signal();
         }
     }
