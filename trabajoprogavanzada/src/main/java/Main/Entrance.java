@@ -43,20 +43,20 @@ public class Entrance {
             }
         } else {
             Children nextChild = entranceQueue.poll();
-            
+
             //Need to add method here for the kid to enter common areas
             
             nextKidIn.signal();
         }
     }
-    
+
     public void openDoors() {
         try {
-            sleep((int)(50 + 50 * Math.random()));
+            sleep((int) (50 + 50 * Math.random()));
         } catch (InterruptedException ex) {
             Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.open=true;
+        this.open = true;
     }
 
 }
