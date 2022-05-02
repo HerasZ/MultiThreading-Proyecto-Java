@@ -27,7 +27,7 @@ public class Entrance {
     private ReentrantLock campLock;
     private Condition nextKidIn;
 
-    public Entrance(AtomicInteger capacity,CommonArea newCommonArea) {
+    public Entrance(AtomicInteger capacity, CommonArea newCommonArea) {
         this.commonArea = newCommonArea;
         this.capacity = capacity;
         this.campLock = new ReentrantLock(true);
@@ -40,33 +40,45 @@ public class Entrance {
     }
 
     public void enterCamp() {
-        try {
         campLock.lock();
-        if (capacity.get() >= 50 || !open) {
-            try {
-                nextKidIn.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            while (capacity.get() == 50 || !open) {
+                try {
+                    System.out.println("Child waiting");
+                    nextKidIn.await();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        } else {
             Children nextChild = entranceQueue.poll();
             commonArea.enterChildren(nextChild);
             capacity.incrementAndGet();
             nextKidIn.signal();
-        }
-        } catch (Exception e) {}
-        finally {
+        } catch (Exception e) {
+        } finally {
             campLock.unlock();
         }
     }
 
-    public void openDoors() {
-        try {
-            sleep((int) (50 + 50 * Math.random()));
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.open = true;
+    public void enterInstructor(Instructor enteringInstructor) {
+        commonArea.enterInstructor(enteringInstructor);
     }
 
+    public void openDoors() {
+        campLock.lock();
+        try {
+            sleep((int) (50 + 50 * Math.random()));
+            this.open = true;
+            nextKidIn.signal();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            campLock.unlock();
+        }
+
+    }
+
+    public boolean getOpen() {
+        return open;
+    }
 }

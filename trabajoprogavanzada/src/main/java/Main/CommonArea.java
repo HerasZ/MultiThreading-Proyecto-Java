@@ -12,11 +12,17 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Heras
  */
 public class CommonArea {
-    
+
     private LinkedBlockingQueue<Children> commonAreaChildren = new LinkedBlockingQueue<Children>();
     private LinkedBlockingQueue<Instructor> commonAreaInstructors = new LinkedBlockingQueue<Instructor>();
-    
+
     public void enterChildren(Children newChild) {
         commonAreaChildren.add(newChild);
+        System.out.println("Child common area");
+    }
+
+    public void enterInstructor(Instructor newInstructor) {
+        commonAreaInstructors.add(newInstructor);
+        System.out.println("Instructor common area");
     }
 }

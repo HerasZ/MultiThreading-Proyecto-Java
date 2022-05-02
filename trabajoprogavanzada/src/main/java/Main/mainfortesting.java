@@ -5,7 +5,10 @@
  */
 package Main;
 
+import static java.lang.Thread.sleep;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,12 +22,13 @@ public class mainfortesting {
     public static void main(String[] args) {
         AtomicInteger capacity = new AtomicInteger(0);
         CommonArea common = new CommonArea();
-        Entrance entrance1 = new Entrance(capacity,common);
-        Entrance entrance2 = new Entrance(capacity,common);
-        Instructor instructortest = new Instructor(0);
-        Children childtest = new Children(0,entrance1,entrance2);
+        Entrance entrance1 = new Entrance(capacity, common);
+        Entrance entrance2 = new Entrance(capacity, common);
+        Instructor instructortest = new Instructor(0,entrance1,entrance2);
+        Children childtest = new Children(0, entrance1, entrance2);
         
-        childtest.run();
+        childtest.start();
+        instructortest.start();
     }
     
 }
