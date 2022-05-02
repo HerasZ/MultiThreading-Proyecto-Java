@@ -7,6 +7,7 @@ package Main;
 
 import static java.lang.Thread.sleep;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
@@ -22,11 +23,11 @@ public class Entrance {
     private CommonArea commonArea;
     private boolean open = false;
     //TODO: Replace with atomic integer 
-    private int capacity;
+    private AtomicInteger capacity;
     private ReentrantLock campLock;
     private Condition nextKidIn;
 
-    public Entrance(int capacity,CommonArea newCommonArea) {
+    public Entrance(AtomicInteger capacity,CommonArea newCommonArea) {
         this.commonArea = newCommonArea;
         this.capacity = capacity;
         this.campLock = new ReentrantLock(true);
@@ -35,10 +36,13 @@ public class Entrance {
 
     public void enterQueue(Children child) {
         entranceQueue.add(child);
+        enterCamp();
     }
 
     public void enterCamp() {
-        if (capacity >= 50 || !open) {
+        try {
+        campLock.lock();
+        if (capacity.get() >= 50 || !open) {
             try {
                 nextKidIn.wait();
             } catch (InterruptedException ex) {
@@ -47,8 +51,12 @@ public class Entrance {
         } else {
             Children nextChild = entranceQueue.poll();
             commonArea.enterChildren(nextChild);
-            capacity++;
+            capacity.incrementAndGet();
             nextKidIn.signal();
+        }
+        } catch (Exception e) {}
+        finally {
+            campLock.unlock();
         }
     }
 

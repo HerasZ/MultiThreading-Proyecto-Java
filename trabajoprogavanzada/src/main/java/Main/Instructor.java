@@ -11,10 +11,10 @@ package Main;
  */
 public class Instructor extends Thread{
     
-    private int id;
+    private String id;
     
     public Instructor(int startid) {
-        this.id = startid;
+        this.id = "M" + String.format("%04d", startid);
     }
     
 }
