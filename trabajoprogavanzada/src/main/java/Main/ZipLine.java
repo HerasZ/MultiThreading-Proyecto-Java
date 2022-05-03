@@ -43,7 +43,7 @@ public class ZipLine {
                 waitTurn.await();
             }
             Children zipChildren = zipQueue.poll();
-            System.out.println(zipChildren.getIdChild()+ "on zipline");
+            System.out.println(zipChildren.getIdChild()+ " on zipline");
             //Getting ready
             sleep(1000);
             //Jump
