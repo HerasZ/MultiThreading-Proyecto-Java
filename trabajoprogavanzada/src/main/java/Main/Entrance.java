@@ -6,7 +6,9 @@
 package Main;
 
 import static java.lang.Thread.sleep;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -22,15 +24,13 @@ public class Entrance {
     private LinkedBlockingQueue<Children> entranceQueue = new LinkedBlockingQueue<Children>();
     private CommonArea commonArea;
     private boolean open = false;
-    private AtomicInteger capacity;
-    private ReentrantLock campLock;
-    private Condition nextKidIn;
+    private Semaphore campSemaphore;
+    private CountDownLatch closedDoors = new CountDownLatch(1);
 
-    public Entrance(AtomicInteger capacity, CommonArea newCommonArea) {
+    public Entrance(CommonArea newCommonArea) {
         this.commonArea = newCommonArea;
-        this.capacity = capacity;
-        this.campLock = new ReentrantLock(true);
-        nextKidIn = campLock.newCondition();
+
+        this.campSemaphore = new Semaphore(50, true);
     }
 
     public void enterQueue(Children child) {
@@ -39,23 +39,17 @@ public class Entrance {
     }
 
     public void enterCamp() {
-        campLock.lock();
         try {
-            while (capacity.get() == 50 || !open) {
-                try {
-                    System.out.println("Child waiting");
-                    nextKidIn.await();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            while (!open) {
+                closedDoors.await();
             }
+            campSemaphore.acquire();
             Children nextChild = entranceQueue.poll();
             commonArea.enterChildren(nextChild);
-            capacity.incrementAndGet();
-            nextKidIn.signal();
+            campSemaphore.release();
         } catch (Exception e) {
         } finally {
-            campLock.unlock();
+
         }
     }
 
@@ -64,17 +58,13 @@ public class Entrance {
     }
 
     public void openDoors() {
-        campLock.lock();
         try {
             sleep((int) (50 + 50 * Math.random()));
             this.open = true;
-            nextKidIn.signal();
+            closedDoors.countDown();
         } catch (InterruptedException ex) {
             Logger.getLogger(Entrance.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            campLock.unlock();
         }
-
     }
 
     public boolean getOpen() {

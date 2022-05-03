@@ -23,12 +23,13 @@ public class mainfortesting {
         Snack snack = new Snack();
         CommonArea common = new CommonArea(zip,rope,snack);
         zip.setCommonArea(common);
-        Entrance entrance1 = new Entrance(capacity, common);
-        Entrance entrance2 = new Entrance(capacity, common);
+        Entrance entrance1 = new Entrance(common);
+        Entrance entrance2 = new Entrance(common);
         Instructor instructortest = new Instructor(1, entrance1, entrance2);
-        Children childtest = new Children(1, entrance1, entrance2);
+        for(int i=1;i<5;i++) {
+            new Children(i, entrance1, entrance2).start();
+        }
 
-        childtest.start();
         instructortest.start();
     }
 
