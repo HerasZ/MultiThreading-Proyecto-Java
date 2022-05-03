@@ -18,10 +18,14 @@ public class mainfortesting {
      */
     public static void main(String[] args) {
         AtomicInteger capacity = new AtomicInteger(0);
-        CommonArea common = new CommonArea();
+        ZipLine zip = new ZipLine();
+        Rope rope = new Rope();
+        Snack snack = new Snack();
+        CommonArea common = new CommonArea(zip,rope,snack);
+        zip.setCommonArea(common);
         Entrance entrance1 = new Entrance(capacity, common);
         Entrance entrance2 = new Entrance(capacity, common);
-        Instructor instructortest = new Instructor(0, entrance1, entrance2);
+        Instructor instructortest = new Instructor(1, entrance1, entrance2);
         Children childtest = new Children(0, entrance1, entrance2);
 
         childtest.start();

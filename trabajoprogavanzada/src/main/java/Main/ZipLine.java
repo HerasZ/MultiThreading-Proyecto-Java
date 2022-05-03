@@ -31,6 +31,11 @@ public class ZipLine {
         this.commonArea = newCommonArea;
     }
 
+    public void enterZipQueue(Children newChild) {
+        zipQueue.add(newChild);
+        useZipLine();
+    }
+
     public void useZipLine() {
         zipLock.lock();
         try {
@@ -38,6 +43,7 @@ public class ZipLine {
                 waitTurn.await();
             }
             Children zipChildren = zipQueue.poll();
+            System.out.println(zipChildren.getIdChild()+ "on zipline");
             //Getting ready
             sleep(1000);
             //Jump
@@ -55,7 +61,7 @@ public class ZipLine {
                     commonArea.enterInstructor(zipInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(zipInstructor);
-                    onBreak=false;
+                    onBreak = false;
                     zipInstructor.resetBreakCountdown();
                     waitTurn.signal();
                 } catch (InterruptedException ex) {
@@ -70,7 +76,11 @@ public class ZipLine {
     }
 
     public void setZipInstructor(Instructor zipInstructor) {
+        zipLock.lock();
         onBreak = false;
+        System.out.println("Instructor on zipline");
         this.zipInstructor = zipInstructor;
+        waitTurn.signal();
+        zipLock.unlock();
     }
 }

@@ -23,6 +23,12 @@ public class CommonArea {
     private ZipLine ziplineActivity;
     private Rope ropeActivity;
     private Snack snackActivity;
+    
+    public CommonArea(ZipLine newLine,Rope newRope, Snack newSnack) {
+        this.ziplineActivity = newLine;
+        this.ropeActivity = newRope;
+        this.snackActivity=newSnack;
+    }
 
     public void enterChildren(Children newChild) {
         commonAreaChildren.add(newChild);
@@ -33,23 +39,28 @@ public class CommonArea {
             Logger.getLogger(CommonArea.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Child common area");
+        childrenNewActivity(newChild);
     }
 
     public void enterInstructor(Instructor newInstructor) {
-        commonAreaInstructors.add(newInstructor);
-        System.out.println("Instructor common area");
+        if (newInstructor.getIdInst().equals("M1")) {
+            System.out.println("instructor added");
+            ziplineActivity.setZipInstructor(newInstructor);
+        }
     }
 
     public void childrenNewActivity(Children actChildren) {
-        int coinFlip;
+        int coinFlip = 0;
+        /*
         if (actChildren.getSnackCountdown() <= 0) {
             coinFlip = (int) (0.5 + 2 * Math.random());
         } else {
             coinFlip = (int) (0.5 + Math.random());
         }
+        */
         if (coinFlip == 0) {
             //Go to ZipLine
-
+            ziplineActivity.enterZipQueue(actChildren);
         } else if (coinFlip == 1) {
             //Go to Rope
 

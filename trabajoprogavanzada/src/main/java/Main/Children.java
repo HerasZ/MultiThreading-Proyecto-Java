@@ -11,13 +11,13 @@ package Main;
  */
 public class Children extends Thread {
 
-    private String id;
+    private String idChild;
     private Entrance entrance1, entrance2;
     private int activitiesLeft = 15;
     private int snackCountdown = 3;
 
     public Children(int startid, Entrance newEntry1, Entrance newEntry2) {
-        this.id = "N" + String.format("%04d", startid);
+        this.idChild = "N" + String.format("%04d", startid);
         this.entrance1 = newEntry1;
         this.entrance2 = newEntry2;
     }
@@ -42,5 +42,9 @@ public class Children extends Thread {
 
     public void lowerSnackCountdown(int amount) {
         this.snackCountdown -= amount;
+    }
+
+    public String getIdChild() {
+        return idChild;
     }
 }

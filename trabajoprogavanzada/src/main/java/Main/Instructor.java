@@ -11,12 +11,12 @@ package Main;
  */
 public class Instructor extends Thread {
 
-    private String id;
+    private String idInst;
     private Entrance entrance1, entrance2;
     private int breakCountdown = 10;
 
     public Instructor(int startid, Entrance newEntry1, Entrance newEntry2) {
-        this.id = "M" + String.format("%04d", startid);
+        this.idInst = "M" + Integer.toString(startid);
         this.entrance1 = newEntry1;
         this.entrance2 = newEntry2;
     }
@@ -36,6 +36,10 @@ public class Instructor extends Thread {
             }
             entrance2.enterInstructor(this);
         }
+    }
+
+    public String getIdInst() {
+        return idInst;
     }
 
     public int getBreakCountdown() {
