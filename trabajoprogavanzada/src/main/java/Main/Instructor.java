@@ -13,6 +13,7 @@ public class Instructor extends Thread {
 
     private String id;
     private Entrance entrance1, entrance2;
+    private int breakCountdown = 10;
 
     public Instructor(int startid, Entrance newEntry1, Entrance newEntry2) {
         this.id = "M" + String.format("%04d", startid);
@@ -37,4 +38,15 @@ public class Instructor extends Thread {
         }
     }
 
+    public int getBreakCountdown() {
+        return breakCountdown;
+    }
+
+    public void resetBreakCountdown() {
+        this.breakCountdown = 10;
+    }
+    
+    public void lowerBreakCountdown() {
+        this.breakCountdown--;
+    }
 }

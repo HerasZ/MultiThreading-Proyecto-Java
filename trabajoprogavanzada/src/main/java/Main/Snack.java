@@ -10,5 +10,5 @@ package Main;
  * @author Heras
  */
 public class Snack {
-    
+
 }

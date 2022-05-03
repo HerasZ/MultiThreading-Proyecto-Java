@@ -5,7 +5,6 @@
  */
 package Main;
 
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,11 +21,11 @@ public class mainfortesting {
         CommonArea common = new CommonArea();
         Entrance entrance1 = new Entrance(capacity, common);
         Entrance entrance2 = new Entrance(capacity, common);
-        Instructor instructortest = new Instructor(0,entrance1,entrance2);
+        Instructor instructortest = new Instructor(0, entrance1, entrance2);
         Children childtest = new Children(0, entrance1, entrance2);
-        
+
         childtest.start();
         instructortest.start();
     }
-    
+
 }

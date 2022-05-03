@@ -5,7 +5,11 @@
  */
 package Main;
 
+import static java.lang.Thread.sleep;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,12 +19,19 @@ public class CommonArea {
 
     private LinkedBlockingQueue<Children> commonAreaChildren = new LinkedBlockingQueue<Children>();
     private LinkedBlockingQueue<Instructor> commonAreaInstructors = new LinkedBlockingQueue<Instructor>();
+    private ReentrantLock instructorBreakLock = new ReentrantLock(true);
     private ZipLine ziplineActivity;
     private Rope ropeActivity;
     private Snack snackActivity;
 
     public void enterChildren(Children newChild) {
         commonAreaChildren.add(newChild);
+        try {
+            //Decide on activity
+            sleep((int) (2000 + 2000 * Math.random()));
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CommonArea.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("Child common area");
     }
 
@@ -46,5 +57,9 @@ public class CommonArea {
             actChildren.resetSnackCountdown();
             //Go to snacks
         }
+    }
+    
+    public void instructorBreakOver(Instructor onBreak) {
+        this.commonAreaInstructors.remove(onBreak);
     }
 }

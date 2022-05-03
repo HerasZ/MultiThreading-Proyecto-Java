@@ -31,14 +31,16 @@ public class Children extends Thread {
             entrance2.enterQueue(this);
         }
     }
-    
+
     public int getSnackCountdown() {
         return snackCountdown;
     }
+
     public void resetSnackCountdown() {
         this.snackCountdown = 3;
     }
+
     public void lowerSnackCountdown(int amount) {
-        this.snackCountdown -=amount;
+        this.snackCountdown -= amount;
     }
 }

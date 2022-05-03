@@ -17,21 +17,26 @@ import java.util.logging.Logger;
  * @author Heras
  */
 public class ZipLine {
-    
+
     private LinkedBlockingQueue<Children> zipQueue = new LinkedBlockingQueue<Children>();
     private CommonArea commonArea;
     private ReentrantLock zipLock;
     private Condition waitTurn;
-    
+    private Instructor zipInstructor;
+    private boolean onBreak = true;
+
     public void setCommonArea(CommonArea newCommonArea) {
         zipLock = new ReentrantLock(true);
         waitTurn = zipLock.newCondition();
         this.commonArea = newCommonArea;
     }
-    
+
     public void useZipLine() {
         zipLock.lock();
         try {
+            while (onBreak) {
+                waitTurn.await();
+            }
             Children zipChildren = zipQueue.poll();
             //Getting ready
             sleep(1000);
@@ -39,11 +44,33 @@ public class ZipLine {
             sleep(3000);
             //Get out of activity
             sleep(500);
+            commonArea.enterChildren(zipChildren);
         } catch (InterruptedException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            //If instructor has to take break
+            if (zipInstructor.getBreakCountdown() <= 0) {
+                try {
+                    onBreak = true;
+                    commonArea.enterInstructor(zipInstructor);
+                    sleep((int) (1000 + 1000 * Math.random()));
+                    commonArea.instructorBreakOver(zipInstructor);
+                    onBreak=false;
+                    zipInstructor.resetBreakCountdown();
+                    waitTurn.signal();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                zipInstructor.lowerBreakCountdown();
+            }
+            zipLock.unlock();
         }
-        
+
     }
-    
-    
+
+    public void setZipInstructor(Instructor zipInstructor) {
+        onBreak = false;
+        this.zipInstructor = zipInstructor;
+    }
 }
