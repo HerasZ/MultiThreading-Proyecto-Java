@@ -14,6 +14,7 @@ public class Children extends Thread {
     private String id;
     private Entrance entrance1, entrance2;
     private int activitiesLeft = 15;
+    private int snackCountdown = 3;
 
     public Children(int startid, Entrance newEntry1, Entrance newEntry2) {
         this.id = "N" + String.format("%04d", startid);
@@ -29,5 +30,15 @@ public class Children extends Thread {
         } else {
             entrance2.enterQueue(this);
         }
+    }
+    
+    public int getSnackCountdown() {
+        return snackCountdown;
+    }
+    public void resetSnackCountdown() {
+        this.snackCountdown = 3;
+    }
+    public void lowerSnackCountdown(int amount) {
+        this.snackCountdown -=amount;
     }
 }

@@ -22,7 +22,6 @@ public class Entrance {
     private LinkedBlockingQueue<Children> entranceQueue = new LinkedBlockingQueue<Children>();
     private CommonArea commonArea;
     private boolean open = false;
-    //TODO: Replace with atomic integer 
     private AtomicInteger capacity;
     private ReentrantLock campLock;
     private Condition nextKidIn;

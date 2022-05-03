@@ -28,4 +28,23 @@ public class CommonArea {
         commonAreaInstructors.add(newInstructor);
         System.out.println("Instructor common area");
     }
+
+    public void childrenNewActivity(Children actChildren) {
+        int coinFlip;
+        if (actChildren.getSnackCountdown() <= 0) {
+            coinFlip = (int) (0.5 + 2 * Math.random());
+        } else {
+            coinFlip = (int) (0.5 + Math.random());
+        }
+        if (coinFlip == 0) {
+            //Go to ZipLine
+
+        } else if (coinFlip == 1) {
+            //Go to Rope
+
+        } else {
+            actChildren.resetSnackCountdown();
+            //Go to snacks
+        }
+    }
 }
