@@ -6,6 +6,8 @@
 package Main;
 
 import static java.lang.Thread.sleep;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,17 +23,18 @@ public class ZipLine {
     private LinkedBlockingQueue<Children> zipQueue = new LinkedBlockingQueue<Children>();
     private CommonArea commonArea;
     private ReentrantLock zipLock;
-    private Condition waitTurn;
+    private Condition waitForInstructor;
+    private CyclicBarrier ChildrenDone;
     private Instructor zipInstructor;
     private boolean onBreak = true;
 
     public ZipLine() {
         zipLock = new ReentrantLock(true);
-        waitTurn = zipLock.newCondition();
+        waitForInstructor = zipLock.newCondition();
+        ChildrenDone = new CyclicBarrier(2);
     }
 
     public void setCommonArea(CommonArea newCommonArea) {
-        zipLock = new ReentrantLock(true);
         this.commonArea = newCommonArea;
     }
 
@@ -42,11 +45,12 @@ public class ZipLine {
 
     public void useZipLine() {
         zipLock.lock();
+        Children zipChildren = zipQueue.poll();
         try {
             while (onBreak) {
-                waitTurn.await();
+                System.out.println("kid waiting");
+                waitForInstructor.await();
             }
-            Children zipChildren = zipQueue.poll();
             System.out.println(zipChildren.getIdChild() + " on zipline");
             //Getting ready
             sleep(1000);
@@ -54,40 +58,46 @@ public class ZipLine {
             sleep(3000);
             //Get out of activity
             sleep(500);
-            commonArea.enterChildren(zipChildren);
-        } catch (InterruptedException ex) {
+            //Let the Instructor know we are done
+            ChildrenDone.await();
+            //
+        } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            //If instructor has to take break
-            if (zipInstructor.getBreakCountdown() <= 0) {
-                try {
-                    onBreak = true;
-                    commonArea.enterInstructor(zipInstructor);
-                    sleep((int) (1000 + 1000 * Math.random()));
-                    commonArea.instructorBreakOver(zipInstructor);
-                    onBreak = false;
-                    zipInstructor.resetBreakCountdown();
-                    waitTurn.signal();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                zipInstructor.lowerBreakCountdown();
-            }
             zipLock.unlock();
+            commonArea.enterChildren(zipChildren);
         }
 
     }
 
-    public void setZipInstructor(Instructor zipInstructor) {
-        zipLock.lock();
-        try {
-            System.out.println("Instructor on zipline");
-            this.zipInstructor = zipInstructor;
-            onBreak = false;
-            waitTurn.signal();
-        } finally {
-            zipLock.unlock();
+    public void waitZipLine() {
+        while (true) {
+            try {
+                //Wait until children is done
+                ChildrenDone.await();
+                if (this.zipInstructor.getBreakCountdown() <= 0) {
+                    zipLock.lock();
+                    this.onBreak = true;
+                    commonArea.instructorBreakBegin(zipInstructor);
+                    sleep((int) (1000 + 1000 * Math.random()));
+                    commonArea.instructorBreakOver(zipInstructor);
+                    zipInstructor.resetBreakCountdown();
+                    this.onBreak = false;
+                    waitForInstructor.signal();
+                    zipLock.unlock();
+                } else {
+                    this.zipInstructor.lowerBreakCountdown();
+                }
+            } catch (InterruptedException | BrokenBarrierException ex) {
+                Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+    }
+
+    public void setZipInstructor(Instructor zipInstructor) {
+        System.out.println("Instructor on zipline");
+        this.onBreak = false;
+        this.zipInstructor = zipInstructor;
+        waitZipLine();
     }
 }

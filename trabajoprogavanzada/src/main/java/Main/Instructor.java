@@ -13,12 +13,13 @@ public class Instructor extends Thread {
 
     private String idInst;
     private Entrance entrance1, entrance2;
-    private int breakCountdown = 10;
+    private int breakCountdown;
 
     public Instructor(int startid, Entrance newEntry1, Entrance newEntry2) {
         this.idInst = "M" + Integer.toString(startid);
         this.entrance1 = newEntry1;
         this.entrance2 = newEntry2;
+        this.breakCountdown = 10;
     }
 
     public void run() {

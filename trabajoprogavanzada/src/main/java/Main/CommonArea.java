@@ -69,7 +69,11 @@ public class CommonArea {
             //Go to snacks
         }
     }
-
+    
+    public void instructorBreakBegin(Instructor onBreak) {
+        this.commonAreaInstructors.add(onBreak);
+    }
+    
     public void instructorBreakOver(Instructor onBreak) {
         this.commonAreaInstructors.remove(onBreak);
     }
