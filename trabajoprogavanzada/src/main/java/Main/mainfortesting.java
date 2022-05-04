@@ -17,7 +17,6 @@ public class mainfortesting {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        AtomicInteger capacity = new AtomicInteger(0);
         ZipLine zip = new ZipLine();
         Rope rope = new Rope();
         Snack snack = new Snack();

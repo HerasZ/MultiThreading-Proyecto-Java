@@ -52,6 +52,6 @@ public class Instructor extends Thread {
     }
     
     public void lowerBreakCountdown() {
-        this.breakCountdown--;
+        this.breakCountdown -=1;
     }
 }
