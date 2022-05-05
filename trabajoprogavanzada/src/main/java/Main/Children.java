@@ -47,6 +47,13 @@ public class Children extends Thread {
         }
     }
 
+    public int getActivitiesLeft() {
+        return activitiesLeft;
+    }
+    public void lowerActivitiesLeft() {
+        this.activitiesLeft -=1;
+    }
+
     public String getIdChild() {
         return idChild;
     }

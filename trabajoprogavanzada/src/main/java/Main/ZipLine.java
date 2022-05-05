@@ -39,17 +39,12 @@ public class ZipLine {
         this.commonArea = newCommonArea;
     }
 
-    public void enterZipQueue(Children newChild) {
+    public void useZipLine(Children newChild) {
         zipQueue.add(newChild);
-        useZipLine();
-    }
-
-    public void useZipLine() {
         zipLock.lock();
-        Children zipChildren = zipQueue.poll();
         try {
             childrenReady.await();
-            System.out.println(zipChildren.getIdChild() + " on zipline");
+            System.out.println(newChild.getIdChild() + " on zipline");
             //Getting ready
             sleep(1000);
             //Jump
@@ -61,16 +56,15 @@ public class ZipLine {
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            zipQueue.remove(newChild);
             zipLock.unlock();
-            commonArea.enterChildren(zipChildren);
+            newChild.lowerActivitiesLeft();
         }
 
     }
 
     public void waitZipLine() {
         while (true) {
-            
-            System.out.println(this.zipInstructor.getBreakCountdown());
             if (this.zipInstructor.getBreakCountdown() <= 0) {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {

@@ -32,25 +32,29 @@ public class CommonArea {
 
     public void enterChildren(Children newChild) {
         commonAreaChildren.add(newChild);
-        System.out.println(newChild.getIdChild() + " common area");
-        try {
-            //Decide on activity
-            sleep((int) (2000 + 2000 * Math.random()));
-        } catch (InterruptedException ex) {
-            Logger.getLogger(CommonArea.class.getName()).log(Level.SEVERE, null, ex);
+        while (newChild.getActivitiesLeft() != 0) {
+            System.out.println(newChild.getIdChild() + " common area");
+            try {
+                //Decide on activity
+                sleep((int) (2000 + 2000 * Math.random()));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CommonArea.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            commonAreaChildren.remove(newChild);
+            childrenNewActivity(newChild);
         }
-
-        childrenNewActivity(newChild);
     }
 
     public void enterInstructor(Instructor newInstructor) {
         if (newInstructor.getIdInst().equals("M1")) {
             ziplineActivity.setZipInstructor(newInstructor);
+        } else if (newInstructor.getIdInst().equals("M2")) {
+            ropeActivity.setRopeInstructor(newInstructor);
         }
     }
 
     public void childrenNewActivity(Children actChildren) {
-        int coinFlip = 0;
+        int coinFlip = 1;
         /*
         if (actChildren.getSnackCountdown() <= 0) {
             coinFlip = (int) (0.5 + 2 * Math.random());
@@ -60,20 +64,20 @@ public class CommonArea {
          */
         if (coinFlip == 0) {
             //Go to ZipLine
-            ziplineActivity.enterZipQueue(actChildren);
+            ziplineActivity.useZipLine(actChildren);
         } else if (coinFlip == 1) {
             //Go to Rope
-
+            ropeActivity.useRope(actChildren);
         } else {
             actChildren.resetSnackCountdown();
             //Go to snacks
         }
     }
-    
+
     public void instructorBreakBegin(Instructor onBreak) {
         this.commonAreaInstructors.add(onBreak);
     }
-    
+
     public void instructorBreakOver(Instructor onBreak) {
         this.commonAreaInstructors.remove(onBreak);
     }
