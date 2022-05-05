@@ -26,13 +26,14 @@ public class Rope {
     // teamA wins -> 0 teamB wins -> 1
     private int winningTeam;
     private CommonArea commonArea;
-    private CyclicBarrier teamsReady;
+    private CyclicBarrier teamsReady, gameDone;
     private Instructor ropeInstructor;
     private Semaphore teamLimit;
     private boolean onBreak = true;
 
     public Rope() {
         teamsReady = new CyclicBarrier(11);
+        gameDone = new CyclicBarrier(11);
         teamLimit = new Semaphore(10, true);
 
     }
@@ -40,41 +41,35 @@ public class Rope {
     public void setCommonArea(CommonArea newCommonArea) {
         this.commonArea = newCommonArea;
     }
-
-    public void enterRopeQueue(Children newChild) {
+    
+    public void useRope(Children newChild) {
         ropeQueue.add(newChild);
-        useRope();
-    }
-
-    public void useRope() {
-        Children ropeChildren = ropeQueue.poll();
         try {
             //Go into the pre-match status
             teamLimit.acquire();
-            int assignedTeam = assignTeam(ropeChildren);
+            int assignedTeam = assignTeam(newChild);
             //Wait until both teams are formed
             teamsReady.await();
-            System.out.println(ropeChildren.getIdChild() + " on rope");
+            System.out.println(newChild.getIdChild() + " on rope");
             //Rope activity taking place
             sleep(7000);
             if(assignedTeam == this.winningTeam) {
-                ropeChildren.lowerSnackCountdown(2);
+                newChild.lowerSnackCountdown(2);
             } else {
-                ropeChildren.lowerSnackCountdown(1);
+                newChild.lowerSnackCountdown(1);
             }
+            gameDone.await();
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            ropeQueue.remove(newChild);
             teamLimit.release();
-            commonArea.enterChildren(ropeChildren);
         }
 
     }
 
     public void waitRope() {
         while (true) {
-
-            System.out.println(this.ropeInstructor.getBreakCountdown());
             if (this.ropeInstructor.getBreakCountdown() <= 0) {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {
@@ -95,7 +90,8 @@ public class Rope {
                 teamsReady.await();
                 //Choose one team as a winner randomly
                 this.winningTeam = (int) (0.5 + Math.random());
-                //Clear the teams after the game starts 
+                //Clear the teams after the game ends
+                gameDone.await();
                 this.teamA.clear();
                 this.teamB.clear();
             } catch (BrokenBarrierException | InterruptedException ex) {
