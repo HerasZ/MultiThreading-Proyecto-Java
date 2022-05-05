@@ -5,8 +5,10 @@
  */
 package Main;
 
+import static java.lang.Thread.sleep;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -16,13 +18,16 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Snack {
     
     private LinkedBlockingQueue<Children> snackQueue = new LinkedBlockingQueue<Children>();
-    private LinkedBlockingQueue<String> cleanTrays= new LinkedBlockingQueue<String>();
-    private LinkedBlockingQueue<String> dirtyTrays = new LinkedBlockingQueue<String>();
     private CommonArea commonArea;
     private ReentrantLock snackLock;
     private Semaphore snackCapacity;
-    private  Instructor snackInstructor1;
-    private  Instructor snackInstructor2;
+    private Instructor snackInstructor1;
+    private Instructor snackInstructor2;
+    private int cleanTrays = 0;
+    private int dirtyTrays = 25;
+    private boolean empty;
+    private Condition pileEmpty;
+    private Condition pileFull;
     
     
     
@@ -34,17 +39,41 @@ public class Snack {
     
     public void setCommonArea(CommonArea newCommonArea){
         this.commonArea = newCommonArea;
-    }
-    
-    
-    
-    public void enterSnack(Children newChild){
-        snackQueue.add(newChild);
         
     }
     
     
-    public void useSnack(){
+    
+    public void enterSnack(Children newChild) throws InterruptedException{
+        snackQueue.add(newChild);
+        useSnack();
+        
+    }
+    
+    
+    public void useSnack() throws InterruptedException{
+        snackCapacity.acquire();
+        Children snackChildren = snackQueue.poll();
+        snackLock.lock();
+        while(empty){
+            try{
+                pileEmpty.await();
+            }catch(Exception e){}
+                       
+        }
+        empty = false;
+        cleanTrays--;
+        dirtyTrays++;
+        System.out.println(newChild.getIdChild() + " on Snack");
+        sleep(7000);
+        pileFull.signalAll();
+            
+            
+            
+            
+            
+            
+        
         
     }
     
