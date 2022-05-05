@@ -51,11 +51,13 @@ public class Snack {
     }
     
     
-    public void useSnack() throws InterruptedException{
+    public void useSnack(Children newChild) throws InterruptedException{
+        snackQueue.add(newChild);
         snackCapacity.acquire();
         Children snackChildren = snackQueue.poll();
         snackLock.lock();
-        while(empty){
+        try{
+            while(empty){
             try{
                 pileEmpty.await();
             }catch(Exception e){}
@@ -67,6 +69,12 @@ public class Snack {
         System.out.println(newChild.getIdChild() + " on Snack");
         sleep(7000);
         pileFull.signalAll();
+        }catch(Exception  e){}
+        finally{
+            snackQueue.remove(newChild);
+            snackLock.unlock();
+        }
+        snackCapacity.release();
             
             
             
