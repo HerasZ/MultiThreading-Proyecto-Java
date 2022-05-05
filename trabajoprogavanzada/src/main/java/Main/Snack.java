@@ -65,9 +65,9 @@ public class Snack {
         }
         empty = false;
         cleanTrays--;
-        dirtyTrays++;
         System.out.println(newChild.getIdChild() + " on Snack");
         sleep(7000);
+        dirtyTrays++;
         pileFull.signalAll();
         }catch(Exception  e){}
         finally{
@@ -76,18 +76,14 @@ public class Snack {
         }
         snackCapacity.release();
             
-            
-            
-            
-            
-            
-        
-        
     }
     
     
     
-    
+    public void cleanTrays(Instructor instructor1, Instructor instructor2){
+        System.out.println("Instructor1 on zipline");
+        System.out.println("Instructor2 on zipline");
+    }
     
     
     
