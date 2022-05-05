@@ -9,9 +9,6 @@ import static java.lang.Thread.sleep;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,10 +24,9 @@ public class Entrance {
     private Semaphore campSemaphore;
     private CountDownLatch closedDoors = new CountDownLatch(1);
 
-    public Entrance(CommonArea newCommonArea) {
+    public Entrance(CommonArea newCommonArea,Semaphore newSemaphore) {
         this.commonArea = newCommonArea;
-
-        this.campSemaphore = new Semaphore(50, true);
+        this.campSemaphore = newSemaphore;
     }
 
     public void enterQueue(Children child) {
