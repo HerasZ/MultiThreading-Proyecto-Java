@@ -44,11 +44,7 @@ public class Snack {
     
     
     
-    public void enterSnack(Children newChild) throws InterruptedException{
-        snackQueue.add(newChild);
-        useSnack();
-        
-    }
+    
     
     
     public void useSnack(Children newChild) throws InterruptedException{
