@@ -50,7 +50,7 @@ public class Snack {
     public void useSnack(Children newChild) throws InterruptedException{
         snackQueue.add(newChild);
         snackCapacity.acquire();
-        Children snackChildren = snackQueue.poll();
+        snackQueue.remove(newChild);
         snackLock.lock();
         try{
             while(empty){
