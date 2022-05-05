@@ -105,7 +105,7 @@ public class Rope {
         }
     }
 
-    public void setZipInstructor(Instructor ropeInstructor) {
+    public void setRopeInstructor(Instructor ropeInstructor) {
         System.out.println("Instructor on rope");
         this.onBreak = false;
         this.ropeInstructor = ropeInstructor;
