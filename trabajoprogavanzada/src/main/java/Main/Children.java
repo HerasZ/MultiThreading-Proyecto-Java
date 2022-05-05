@@ -42,6 +42,9 @@ public class Children extends Thread {
 
     public void lowerSnackCountdown(int amount) {
         this.snackCountdown -= amount;
+        if (this.snackCountdown < 0) {
+            this.snackCountdown = 0;
+        }
     }
 
     public String getIdChild() {
