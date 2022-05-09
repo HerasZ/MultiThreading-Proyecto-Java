@@ -5,29 +5,43 @@
  */
 package Main;
 
+import static java.lang.Thread.sleep;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Heras
  */
-public class BeginCamp {
-    
-    public static void startCamp(PrinterLogger UIPrinterLogger) {
+public class BeginCamp implements Runnable {
+
+    private PrinterLogger UIPrinterLogger;
+
+    public BeginCamp(PrinterLogger ui) {
+        this.UIPrinterLogger = ui;
+    }
+
+    public void startCamp() {
         ZipLine zip = new ZipLine(UIPrinterLogger);
         Rope rope = new Rope(UIPrinterLogger);
         Snack snack = new Snack(UIPrinterLogger);
-        CommonArea common = new CommonArea(zip, rope, snack,UIPrinterLogger);
+        CommonArea common = new CommonArea(zip, rope, snack, UIPrinterLogger);
         zip.setCommonArea(common);
         rope.setCommonArea(common);
         snack.setCommonArea(common);
         Semaphore campSemaphore = new Semaphore(50, true);
-        Entrance entrance1 = new Entrance(common, campSemaphore,UIPrinterLogger);
-        Entrance entrance2 = new Entrance(common, campSemaphore,UIPrinterLogger);
+        Entrance entrance1 = new Entrance(common, campSemaphore, UIPrinterLogger, "1");
+        Entrance entrance2 = new Entrance(common, campSemaphore, UIPrinterLogger, "2");
         Instructor instructortest = new Instructor(1, entrance1, entrance2);
         Instructor instructortest1 = new Instructor(2, entrance1, entrance2);
         for (int i = 1; i < 21; i++) {
+            try {
+                sleep((int) (1000 + 2000 * Math.random()));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BeginCamp.class.getName()).log(Level.SEVERE, null, ex);
+            }
             new Children(i, entrance1, entrance2).start();
         }
 
@@ -35,4 +49,7 @@ public class BeginCamp {
         instructortest1.start();
     }
 
+    public void run() {
+        startCamp();
+    }
 }

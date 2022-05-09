@@ -33,8 +33,9 @@ public class CommonArea {
     }
 
     public void enterChildren(Children newChild) {
-        commonAreaChildren.add(newChild);
         while (newChild.getActivitiesLeft() != 0) {
+            commonAreaChildren.add(newChild);
+            UIPrinterLogger.setTextTo(commonAreaChildren.toString(), "commonAreaChildren");
             System.out.println(newChild.getIdChild() + " common area");
             try {
                 //Decide on activity
@@ -43,6 +44,7 @@ public class CommonArea {
                 Logger.getLogger(CommonArea.class.getName()).log(Level.SEVERE, null, ex);
             }
             commonAreaChildren.remove(newChild);
+            UIPrinterLogger.setTextTo(commonAreaChildren.toString(), "commonAreaChildren");
             childrenNewActivity(newChild);
         }
     }

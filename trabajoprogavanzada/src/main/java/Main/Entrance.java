@@ -24,26 +24,29 @@ public class Entrance {
     private Semaphore campSemaphore;
     private CountDownLatch closedDoors = new CountDownLatch(1);
     private PrinterLogger UIPrinterLogger;
+    private String doorID;
 
-    public Entrance(CommonArea newCommonArea,Semaphore newSemaphore,PrinterLogger UIPrinterLogger) {
+    public Entrance(CommonArea newCommonArea, Semaphore newSemaphore, PrinterLogger UIPrinterLogger, String doorID) {
         this.commonArea = newCommonArea;
         this.campSemaphore = newSemaphore;
         this.UIPrinterLogger = UIPrinterLogger;
+        this.doorID = doorID;
     }
 
     public void enterCamp(Children child) {
         entranceQueue.add(child);
+        UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
         try {
             while (!open) {
                 closedDoors.await();
             }
             campSemaphore.acquire();
             Children nextChild = entranceQueue.poll();
+            UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
             commonArea.enterChildren(nextChild);
-            campSemaphore.release();
         } catch (Exception e) {
         } finally {
-
+            campSemaphore.release();
         }
     }
 
