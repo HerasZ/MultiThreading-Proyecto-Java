@@ -5,6 +5,10 @@
  */
 package Main;
 
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Heras
@@ -23,7 +27,9 @@ public class Instructor extends Thread {
     }
 
     public void run() {
+
         int coinFlip = (int) (0.5 + Math.random());
+
         if (coinFlip == 0) {
             if (!entrance1.getOpen()) {
                 entrance1.openDoors();
@@ -37,6 +43,7 @@ public class Instructor extends Thread {
             }
             entrance2.enterInstructor(this);
         }
+
     }
 
     public String getIdInst() {
@@ -50,11 +57,11 @@ public class Instructor extends Thread {
     public void resetBreakCountdown() {
         this.breakCountdown = 10;
     }
-    
+
     public void lowerBreakCountdown() {
-        this.breakCountdown -=1;
+        this.breakCountdown -= 1;
     }
-    
+
     @Override
     public String toString() {
         return this.idInst;

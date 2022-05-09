@@ -36,7 +36,6 @@ public class CommonArea {
         while (newChild.getActivitiesLeft() != 0) {
             commonAreaChildren.add(newChild);
             UIPrinterLogger.setTextTo(commonAreaChildren.toString(), "commonAreaChildren");
-            System.out.println(newChild.getIdChild() + " common area");
             try {
                 //Decide on activity
                 sleep((int) (2000 + 2000 * Math.random()));

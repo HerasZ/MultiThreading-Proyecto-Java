@@ -56,7 +56,6 @@ public class Rope {
             UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
             UIPrinterLogger.setTextTo(this.teamA.toString(), "teamA");
             UIPrinterLogger.setTextTo(this.teamB.toString(), "teamB");
-            System.out.println(newChild.getIdChild() + " on rope");
             //Rope activity taking place
             sleep(7000);
             if (assignedTeam == this.winningTeam) {
@@ -70,7 +69,7 @@ public class Rope {
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            
+
             teamLimit.release();
         }
 
@@ -81,14 +80,12 @@ public class Rope {
             if (this.ropeInstructor.getBreakCountdown() <= 0) {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {
-                    System.out.println(this.ropeInstructor.getIdInst() + " taking break");
                     UIPrinterLogger.setTextTo("", "ropeInstructor");
                     commonArea.instructorBreakBegin(ropeInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(ropeInstructor);
                     ropeInstructor.resetBreakCountdown();
                     UIPrinterLogger.setTextTo(ropeInstructor.getIdInst(), "ropeInstructor");
-                    System.out.println(this.ropeInstructor.getIdInst() + " break over");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -112,7 +109,6 @@ public class Rope {
     }
 
     public void setRopeInstructor(Instructor ropeInstructor) {
-        System.out.println("Instructor on rope");
         this.ropeInstructor = ropeInstructor;
         UIPrinterLogger.setTextTo(ropeInstructor.getIdInst(), "ropeInstructor");
         waitRope();

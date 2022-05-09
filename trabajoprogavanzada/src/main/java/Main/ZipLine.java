@@ -48,7 +48,6 @@ public class ZipLine {
         try {
             UIPrinterLogger.setTextTo(this.zipQueue.toString(), "zipQueue");
             childrenReady.await();
-            System.out.println(newChild.getIdChild() + " on zipline");
             //Getting ready
             UIPrinterLogger.setTextTo(newChild.getIdChild(), "zipPrepare");
             sleep(1000);
@@ -78,12 +77,10 @@ public class ZipLine {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {
                     UIPrinterLogger.setTextTo("", "zipInstructor");
-                    System.out.println(this.zipInstructor.getIdInst() + " taking break");
                     commonArea.instructorBreakBegin(zipInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(zipInstructor);
                     zipInstructor.resetBreakCountdown();
-                    System.out.println(this.zipInstructor.getIdInst() + " break over");
                     UIPrinterLogger.setTextTo(this.zipInstructor.getIdInst(), "zipInstructor");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,7 +101,6 @@ public class ZipLine {
     }
 
     public void setZipInstructor(Instructor zipInstructor) {
-        System.out.println("Instructor on zipline");
         this.zipInstructor = zipInstructor;
         UIPrinterLogger.setTextTo(this.zipInstructor.getIdInst(), "zipInstructor");
         waitZipLine();
