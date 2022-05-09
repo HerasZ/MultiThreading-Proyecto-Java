@@ -31,7 +31,7 @@ public class Rope {
     private Semaphore teamLimit;
     private PrinterLogger UIPrinterLogger;
 
-    public Rope(PrinterLogger UPrinterLogger) {
+    public Rope(PrinterLogger UIPrinterLogger) {
         teamsReady = new CyclicBarrier(11);
         gameDone = new CyclicBarrier(11);
         teamLimit = new Semaphore(10, true);
@@ -45,12 +45,17 @@ public class Rope {
 
     public void useRope(Children newChild) {
         ropeQueue.add(newChild);
+        UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
         try {
             //Go into the pre-match status
             teamLimit.acquire();
             int assignedTeam = assignTeam(newChild);
             //Wait until both teams are formed
             teamsReady.await();
+            ropeQueue.remove(newChild);
+            UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
+            UIPrinterLogger.setTextTo(this.teamA.toString(), "teamA");
+            UIPrinterLogger.setTextTo(this.teamB.toString(), "teamB");
             System.out.println(newChild.getIdChild() + " on rope");
             //Rope activity taking place
             sleep(7000);
@@ -60,10 +65,12 @@ public class Rope {
                 newChild.lowerSnackCountdown(1);
             }
             gameDone.await();
+            UIPrinterLogger.setTextTo("", "teamA");
+            UIPrinterLogger.setTextTo("", "teamB");
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ropeQueue.remove(newChild);
+            
             teamLimit.release();
         }
 
@@ -75,10 +82,12 @@ public class Rope {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {
                     System.out.println(this.ropeInstructor.getIdInst() + " taking break");
+                    UIPrinterLogger.setTextTo("", "ropeInstructor");
                     commonArea.instructorBreakBegin(ropeInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(ropeInstructor);
                     ropeInstructor.resetBreakCountdown();
+                    UIPrinterLogger.setTextTo(ropeInstructor.getIdInst(), "ropeInstructor");
                     System.out.println(this.ropeInstructor.getIdInst() + " break over");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,6 +114,7 @@ public class Rope {
     public void setRopeInstructor(Instructor ropeInstructor) {
         System.out.println("Instructor on rope");
         this.ropeInstructor = ropeInstructor;
+        UIPrinterLogger.setTextTo(ropeInstructor.getIdInst(), "ropeInstructor");
         waitRope();
     }
 

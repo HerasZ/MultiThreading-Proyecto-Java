@@ -25,7 +25,7 @@ public class CommonArea {
     private Snack snackActivity;
     private PrinterLogger UIPrinterLogger;
 
-    public CommonArea(ZipLine newLine, Rope newRope, Snack newSnack,PrinterLogger UIPrinterLogger) {
+    public CommonArea(ZipLine newLine, Rope newRope, Snack newSnack, PrinterLogger UIPrinterLogger) {
         this.ziplineActivity = newLine;
         this.ropeActivity = newRope;
         this.snackActivity = newSnack;
@@ -54,7 +54,13 @@ public class CommonArea {
             ziplineActivity.setZipInstructor(newInstructor);
         } else if (newInstructor.getIdInst().equals("M2")) {
             ropeActivity.setRopeInstructor(newInstructor);
+
+        } else if (newInstructor.getIdInst().equals("M3")) {
+            //snackActivity.setSnackInstructor1(newInstructor);
+        } else {
+            //snackActivity.setSnackInstructor2(newInstructor);
         }
+
     }
 
     public void childrenNewActivity(Children actChildren) {
@@ -79,9 +85,11 @@ public class CommonArea {
 
     public void instructorBreakBegin(Instructor onBreak) {
         this.commonAreaInstructors.add(onBreak);
+        UIPrinterLogger.setTextTo(commonAreaInstructors.toString(), "commonAreaInstructor");
     }
 
     public void instructorBreakOver(Instructor onBreak) {
         this.commonAreaInstructors.remove(onBreak);
+        UIPrinterLogger.setTextTo(commonAreaInstructors.toString(), "commonAreaInstructor");
     }
 }

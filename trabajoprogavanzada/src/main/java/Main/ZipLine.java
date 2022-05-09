@@ -42,22 +42,30 @@ public class ZipLine {
 
     public void useZipLine(Children newChild) {
         zipQueue.add(newChild);
+        UIPrinterLogger.setTextTo(this.zipQueue.toString(), "zipQueue");
         zipLock.lock();
+        zipQueue.remove(newChild);
         try {
+            UIPrinterLogger.setTextTo(this.zipQueue.toString(), "zipQueue");
             childrenReady.await();
             System.out.println(newChild.getIdChild() + " on zipline");
             //Getting ready
+            UIPrinterLogger.setTextTo(newChild.getIdChild(), "zipPrepare");
             sleep(1000);
             //Jump
+            UIPrinterLogger.setTextTo("", "zipPrepare");
+            UIPrinterLogger.setTextTo(newChild.getIdChild(), "zipProgress");
             sleep(3000);
             //Get out of activity
+            UIPrinterLogger.setTextTo("", "zipProgress");
+            UIPrinterLogger.setTextTo(newChild.getIdChild(), "zipFinishing");
             sleep(500);
+            UIPrinterLogger.setTextTo("", "zipFinishing");
             //Let the Instructor know we are done
             childrenDone.await();
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            zipQueue.remove(newChild);
             zipLock.unlock();
             newChild.lowerActivitiesLeft();
         }
@@ -69,12 +77,14 @@ public class ZipLine {
             if (this.zipInstructor.getBreakCountdown() <= 0) {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {
+                    UIPrinterLogger.setTextTo("", "zipInstructor");
                     System.out.println(this.zipInstructor.getIdInst() + " taking break");
                     commonArea.instructorBreakBegin(zipInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(zipInstructor);
                     zipInstructor.resetBreakCountdown();
                     System.out.println(this.zipInstructor.getIdInst() + " break over");
+                    UIPrinterLogger.setTextTo(this.zipInstructor.getIdInst(), "zipInstructor");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -96,6 +106,7 @@ public class ZipLine {
     public void setZipInstructor(Instructor zipInstructor) {
         System.out.println("Instructor on zipline");
         this.zipInstructor = zipInstructor;
+        UIPrinterLogger.setTextTo(this.zipInstructor.getIdInst(), "zipInstructor");
         waitZipLine();
     }
 }

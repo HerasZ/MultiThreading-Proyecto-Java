@@ -34,8 +34,9 @@ public class BeginCamp implements Runnable {
         Semaphore campSemaphore = new Semaphore(50, true);
         Entrance entrance1 = new Entrance(common, campSemaphore, UIPrinterLogger, "1");
         Entrance entrance2 = new Entrance(common, campSemaphore, UIPrinterLogger, "2");
-        Instructor instructortest = new Instructor(1, entrance1, entrance2);
-        Instructor instructortest1 = new Instructor(2, entrance1, entrance2);
+        for(int i = 1; i<5;i++) {
+            new Instructor(i,entrance1,entrance2).start();
+        }
         for (int i = 1; i < 21; i++) {
             try {
                 sleep((int) (1000 + 2000 * Math.random()));
@@ -44,9 +45,6 @@ public class BeginCamp implements Runnable {
             }
             new Children(i, entrance1, entrance2).start();
         }
-
-        instructortest.start();
-        instructortest1.start();
     }
 
     public void run() {

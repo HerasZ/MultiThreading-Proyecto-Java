@@ -54,4 +54,9 @@ public class Instructor extends Thread {
     public void lowerBreakCountdown() {
         this.breakCountdown -=1;
     }
+    
+    @Override
+    public String toString() {
+        return this.idInst;
+    }
 }
