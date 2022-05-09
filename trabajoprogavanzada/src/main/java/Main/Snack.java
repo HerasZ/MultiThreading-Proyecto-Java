@@ -22,10 +22,11 @@ public class Snack {
 
     private LinkedBlockingQueue<Children> snackQueue = new LinkedBlockingQueue<Children>();
     private LinkedBlockingQueue<Instructor> instructors = new LinkedBlockingQueue<Instructor>();
+    private LinkedBlockingQueue<Children> eatingZone = new LinkedBlockingQueue<Children>();
     private CommonArea commonArea;
     private ReentrantLock snackLock;
     private Semaphore snackCapacity;
-    private AtomicInteger cleanTrays = new AtomicInteger();
+    private AtomicInteger cleanTrays = new AtomicInteger(0);
     private AtomicInteger dirtyTrays = new AtomicInteger(25);
     private Condition pileEmpty;
     private Condition pileFull;
@@ -37,6 +38,8 @@ public class Snack {
         pileEmpty = snackLock.newCondition();
         pileFull = snackLock.newCondition();
         this.UIPrinterLogger = UIPrinterLogger;
+        UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
+        UIPrinterLogger.setTextTo(Integer.toString(this.dirtyTrays.get()), "snackDirty");
     }
 
     public void setCommonArea(CommonArea newCommonArea) {
@@ -45,22 +48,30 @@ public class Snack {
 
     public void useSnack(Children newChild) {
         snackQueue.add(newChild);
+        UIPrinterLogger.setTextTo(this.snackQueue.toString(), "snackQueue");
         try {
             snackCapacity.acquire();
+            snackQueue.remove(newChild);
+            UIPrinterLogger.setTextTo(this.snackQueue.toString(), "snackQueue");
+            eatingZone.add(newChild);
+            UIPrinterLogger.setTextTo(this.eatingZone.toString(), "snackChildren");
             snackLock.lock();
             while (cleanTrays.get() == 0) {
                 pileEmpty.await();
             }
 
             cleanTrays.getAndDecrement();
+            UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
             System.out.println(newChild.getIdChild() + " on Snack");
             sleep(7000);
             dirtyTrays.getAndIncrement();
+            UIPrinterLogger.setTextTo(Integer.toString(this.dirtyTrays.get()), "snackDirty");
             pileFull.signal();
             snackLock.unlock();
         } catch (InterruptedException e) {
         } finally {
-            snackQueue.remove(newChild);
+            eatingZone.remove(newChild);
+            UIPrinterLogger.setTextTo(this.eatingZone.toString(), "snackChildren");
             snackCapacity.release();
         }
     }
@@ -91,8 +102,10 @@ public class Snack {
                     pileFull.await();
                 }
                 dirtyTrays.getAndDecrement();
+                UIPrinterLogger.setTextTo(Integer.toString(this.dirtyTrays.get()), "snackDirty");
                 sleep((int) (3000 + 2000 * Math.random()));
                 cleanTrays.getAndIncrement();
+                UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
                 pileEmpty.signal();
                 snackLock.unlock();
             } catch (InterruptedException ex) {
