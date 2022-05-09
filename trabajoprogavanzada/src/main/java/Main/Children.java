@@ -26,9 +26,9 @@ public class Children extends Thread {
     public void run() {
         int coinFlip = (int) (0.5 + Math.random());
         if (coinFlip == 0) {
-            entrance1.enterQueue(this);
+            entrance1.enterCamp(this);
         } else {
-            entrance2.enterQueue(this);
+            entrance2.enterCamp(this);
         }
     }
 
@@ -56,5 +56,10 @@ public class Children extends Thread {
 
     public String getIdChild() {
         return idChild;
+    }
+    
+    @Override
+    public String toString() {
+        return this.idChild;
     }
 }

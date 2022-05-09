@@ -29,12 +29,8 @@ public class Entrance {
         this.campSemaphore = newSemaphore;
     }
 
-    public void enterQueue(Children child) {
+    public void enterCamp(Children child) {
         entranceQueue.add(child);
-        enterCamp();
-    }
-
-    public void enterCamp() {
         try {
             while (!open) {
                 closedDoors.await();
