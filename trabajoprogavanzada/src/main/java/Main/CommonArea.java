@@ -53,11 +53,8 @@ public class CommonArea {
             ziplineActivity.setZipInstructor(newInstructor);
         } else if (newInstructor.getIdInst().equals("M2")) {
             ropeActivity.setRopeInstructor(newInstructor);
-
-        } else if (newInstructor.getIdInst().equals("M3")) {
-            //snackActivity.setSnackInstructor1(newInstructor);
         } else {
-            //snackActivity.setSnackInstructor2(newInstructor);
+            snackActivity.addInstructor(newInstructor);
         }
 
     }
