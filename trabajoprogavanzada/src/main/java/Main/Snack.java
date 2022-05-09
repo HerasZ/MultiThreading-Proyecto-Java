@@ -26,8 +26,8 @@ public class Snack {
     private Semaphore snackCapacity;
     private Instructor snackInstructor1;
     private Instructor snackInstructor2;
-    private AtomicInteger cleanTrays;
-    private AtomicInteger dirtyTrays;
+    private AtomicInteger cleanTrays = new AtomicInteger();
+    private AtomicInteger dirtyTrays = new AtomicInteger(25);
     private boolean empty;
     private Condition pileEmpty;
     private Condition pileFull;
@@ -37,7 +37,6 @@ public class Snack {
         snackLock = new ReentrantLock(true);
         pileEmpty = snackLock.newCondition();
         pileFull = snackLock.newCondition();
-        dirtyTrays.set(25);
     }
 
     public void setCommonArea(CommonArea newCommonArea) {

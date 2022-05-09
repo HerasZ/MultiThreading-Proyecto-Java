@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package UI;
-
+import Main.mainfortesting;
 /**
  *
  * @author Heras
@@ -16,6 +16,7 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        mainfortesting.startCamp();
     }
 
     /**

@@ -18,12 +18,17 @@ public class mainfortesting {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        startCamp();
+    }
+    
+    public static void startCamp() {
         ZipLine zip = new ZipLine();
         Rope rope = new Rope();
         Snack snack = new Snack();
         CommonArea common = new CommonArea(zip, rope, snack);
         zip.setCommonArea(common);
+        rope.setCommonArea(common);
+        snack.setCommonArea(common);
         Semaphore campSemaphore = new Semaphore(50, true);
         Entrance entrance1 = new Entrance(common, campSemaphore);
         Entrance entrance2 = new Entrance(common, campSemaphore);
