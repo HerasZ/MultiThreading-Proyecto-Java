@@ -23,11 +23,13 @@ public class CommonArea {
     private ZipLine ziplineActivity;
     private Rope ropeActivity;
     private Snack snackActivity;
+    private PrinterLogger UIPrinterLogger;
 
-    public CommonArea(ZipLine newLine, Rope newRope, Snack newSnack) {
+    public CommonArea(ZipLine newLine, Rope newRope, Snack newSnack,PrinterLogger UIPrinterLogger) {
         this.ziplineActivity = newLine;
         this.ropeActivity = newRope;
         this.snackActivity = newSnack;
+        this.UIPrinterLogger = UIPrinterLogger;
     }
 
     public void enterChildren(Children newChild) {
@@ -54,14 +56,12 @@ public class CommonArea {
     }
 
     public void childrenNewActivity(Children actChildren) {
-        int coinFlip = 1;
-        /*
+        int coinFlip;
         if (actChildren.getSnackCountdown() <= 0) {
             coinFlip = (int) (0.5 + 2 * Math.random());
         } else {
             coinFlip = (int) (0.5 + Math.random());
         }
-         */
         if (coinFlip == 0) {
             //Go to ZipLine
             ziplineActivity.useZipLine(actChildren);
@@ -71,6 +71,7 @@ public class CommonArea {
         } else {
             actChildren.resetSnackCountdown();
             //Go to snacks
+            snackActivity.useSnack(actChildren);
         }
     }
 

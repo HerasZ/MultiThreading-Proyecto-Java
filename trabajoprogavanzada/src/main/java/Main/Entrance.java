@@ -23,10 +23,12 @@ public class Entrance {
     private boolean open = false;
     private Semaphore campSemaphore;
     private CountDownLatch closedDoors = new CountDownLatch(1);
+    private PrinterLogger UIPrinterLogger;
 
-    public Entrance(CommonArea newCommonArea,Semaphore newSemaphore) {
+    public Entrance(CommonArea newCommonArea,Semaphore newSemaphore,PrinterLogger UIPrinterLogger) {
         this.commonArea = newCommonArea;
         this.campSemaphore = newSemaphore;
+        this.UIPrinterLogger = UIPrinterLogger;
     }
 
     public void enterCamp(Children child) {

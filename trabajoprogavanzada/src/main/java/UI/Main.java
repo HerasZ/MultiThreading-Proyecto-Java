@@ -4,19 +4,24 @@
  * and open the template in the editor.
  */
 package UI;
-import Main.mainfortesting;
+
+import Main.BeginCamp;
+import Main.PrinterLogger;
+
 /**
  *
  * @author Heras
  */
 public class Main extends javax.swing.JFrame {
 
+    private PrinterLogger printer;
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
-        mainfortesting.startCamp();
+        this.printer = new PrinterLogger(ropeInstructor, ropeQueue, snackChildren, snackClean, snackDirty, snackInstructors, snackQueue, teamA, teamB, zipFinishing, zipInstructor, zipPrepare, zipProgress, zipQueue);
+        BeginCamp.startCamp(printer);
     }
 
     /**
@@ -588,7 +593,7 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

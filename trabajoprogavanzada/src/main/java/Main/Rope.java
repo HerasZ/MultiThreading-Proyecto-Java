@@ -29,19 +29,20 @@ public class Rope {
     private CyclicBarrier teamsReady, gameDone;
     private Instructor ropeInstructor;
     private Semaphore teamLimit;
-    private boolean onBreak = true;
+    private PrinterLogger UIPrinterLogger;
 
-    public Rope() {
+    public Rope(PrinterLogger UPrinterLogger) {
         teamsReady = new CyclicBarrier(11);
         gameDone = new CyclicBarrier(11);
         teamLimit = new Semaphore(10, true);
+        this.UIPrinterLogger = UIPrinterLogger;
 
     }
 
     public void setCommonArea(CommonArea newCommonArea) {
         this.commonArea = newCommonArea;
     }
-    
+
     public void useRope(Children newChild) {
         ropeQueue.add(newChild);
         try {
@@ -53,7 +54,7 @@ public class Rope {
             System.out.println(newChild.getIdChild() + " on rope");
             //Rope activity taking place
             sleep(7000);
-            if(assignedTeam == this.winningTeam) {
+            if (assignedTeam == this.winningTeam) {
                 newChild.lowerSnackCountdown(2);
             } else {
                 newChild.lowerSnackCountdown(1);
@@ -103,7 +104,6 @@ public class Rope {
 
     public void setRopeInstructor(Instructor ropeInstructor) {
         System.out.println("Instructor on rope");
-        this.onBreak = false;
         this.ropeInstructor = ropeInstructor;
         waitRope();
     }

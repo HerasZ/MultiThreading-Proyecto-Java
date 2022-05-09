@@ -30,12 +30,15 @@ public class Snack {
     private AtomicInteger dirtyTrays = new AtomicInteger(25);
     private Condition pileEmpty;
     private Condition pileFull;
+    private PrinterLogger UIPrinterLogger;
 
-    public Snack() {
+
+    public Snack(PrinterLogger UIPrinterLogger) {
         snackCapacity = new Semaphore(20, true);
         snackLock = new ReentrantLock(true);
         pileEmpty = snackLock.newCondition();
         pileFull = snackLock.newCondition();
+        this.UIPrinterLogger = UIPrinterLogger;
     }
 
     public void setCommonArea(CommonArea newCommonArea) {

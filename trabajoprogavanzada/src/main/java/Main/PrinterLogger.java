@@ -5,6 +5,7 @@
  */
 package Main;
 
+import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.JTextArea;
 
 /**
@@ -32,6 +33,23 @@ public class PrinterLogger {
         this.zipProgress = zipProgress;
         this.zipQueue = zipQueue;
     }
-    
-    
+
+    public void setTextTo(String newString, String whereToSet) {
+        switch (whereToSet) {
+            case "ropeInstructor" -> ropeInstructor.setText(newString);
+            case "ropeQueue" -> ropeQueue.setText(newString);
+            case "snackChildren" -> snackChildren.setText(newString);
+            case "snackClean" -> snackClean.setText(newString);
+            case "snackDirty" -> snackDirty.setText(newString);
+            case "snackInstructors" -> snackInstructors.setText(newString);
+            case "snackQueue" -> snackQueue.setText(newString);
+            case "teamA" -> teamA.setText(newString);
+            case "teamB" -> teamB.setText(newString);
+            case "zipFinishing" -> zipFinishing.setText(newString);
+            case "zipInstructor" -> zipInstructor.setText(newString);
+            case "zipPrepare" -> zipPrepare.setText(newString);
+            case "zipProgress" -> zipProgress.setText(newString);
+            case "zipQueue" -> zipQueue.setText(newString);
+        }
+    }
 }

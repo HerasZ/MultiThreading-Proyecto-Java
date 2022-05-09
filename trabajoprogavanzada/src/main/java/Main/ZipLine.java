@@ -26,12 +26,13 @@ public class ZipLine {
     private CyclicBarrier childrenReady;
     private CyclicBarrier childrenDone;
     private Instructor zipInstructor;
-    private boolean onBreak = true;
+    private PrinterLogger UIPrinterLogger;
 
-    public ZipLine() {
+    public ZipLine(PrinterLogger UIPrinterLogger) {
         zipLock = new ReentrantLock(true);
         childrenDone = new CyclicBarrier(2);
         childrenReady = new CyclicBarrier(2);
+        this.UIPrinterLogger = UIPrinterLogger;
 
     }
 
@@ -94,7 +95,6 @@ public class ZipLine {
 
     public void setZipInstructor(Instructor zipInstructor) {
         System.out.println("Instructor on zipline");
-        this.onBreak = false;
         this.zipInstructor = zipInstructor;
         waitZipLine();
     }
