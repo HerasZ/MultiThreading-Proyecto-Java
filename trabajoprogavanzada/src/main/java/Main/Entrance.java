@@ -40,8 +40,8 @@ public class Entrance {
             while (!open) {
                 closedDoors.await();
             }
-            campSemaphore.acquire();
             Children nextChild = entranceQueue.poll();
+            campSemaphore.acquire();
             UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
             commonArea.enterChildren(nextChild);
         } catch (Exception e) {
