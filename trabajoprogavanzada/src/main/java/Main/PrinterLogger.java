@@ -7,9 +7,12 @@ package Main;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.concurrent.Semaphore;
@@ -46,6 +49,8 @@ public class PrinterLogger {
         this.commonAreaInstructor = commonAreaInstructor;
         this.entrance1 = entrance1;
         this.entrance2 = entrance2;
+        //Delete the previous log everytime we initialize the program
+        new File("./Log/log.txt").delete();
     }
 
     public void setTextTo(String newString, String whereToSet) {
@@ -95,19 +100,18 @@ public class PrinterLogger {
         }
     }
 
-    public static void log(String toLog) {
+    public void log(String toLog) {
         String rutaLog = "./Log/log.txt";
-
-        try {
+        try {   
             File dirLog = new File("./Log");
 
             if (!dirLog.exists()) {
                 dirLog.mkdir();
             }
 
-            try ( FileWriter fw = new FileWriter(rutaLog);  PrintWriter salida = new PrintWriter(new BufferedWriter(fw))) {
-                salida.println(new Timestamp(Calendar.getInstance().getTime().getTime()) + " " + toLog);
-                salida.println("");
+            try ( BufferedWriter writerLog = new BufferedWriter(new FileWriter(rutaLog, true))) {
+               writerLog.write(new Timestamp(Calendar.getInstance().getTime().getTime()) + " " + toLog);
+               writerLog.newLine();
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
