@@ -5,6 +5,11 @@
  */
 package Main;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -19,7 +24,7 @@ public class PrinterLogger {
 
     private JTextArea ropeInstructor, ropeQueue, snackChildren, snackClean, snackDirty, snackInstructors, snackQueue, teamA,
             teamB, zipFinishing, zipInstructor, zipPrepare, zipProgress, zipQueue, commonAreaChildren, commonAreaInstructor, entrance1, entrance2;
-    private Semaphore UISemaphore = new Semaphore(1,true);
+    private Semaphore UISemaphore = new Semaphore(1, true);
 
     public PrinterLogger(JTextArea ropeInstructor, JTextArea ropeQueue, JTextArea snackChildren, JTextArea snackClean, JTextArea snackDirty, JTextArea snackInstructors, JTextArea snackQueue, JTextArea teamA, JTextArea teamB, JTextArea zipFinishing, JTextArea zipInstructor, JTextArea zipPrepare, JTextArea zipProgress, JTextArea zipQueue, JTextArea commonAreaChildren, JTextArea commonAreaInstructor, JTextArea entrance1, JTextArea entrance2) {
         this.ropeInstructor = ropeInstructor;
@@ -86,6 +91,25 @@ public class PrinterLogger {
             UISemaphore.release();
         } catch (InterruptedException ex) {
             Logger.getLogger(PrinterLogger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void log(String toLog) {
+        String rutaLog = "./Log/log.txt";
+
+        try {
+            File dirLog = new File("./Log");
+
+            if (!dirLog.exists()) {
+                dirLog.mkdir();
+            }
+
+            try ( FileWriter fw = new FileWriter(rutaLog);  PrintWriter salida = new PrintWriter(new BufferedWriter(fw))) {
+                salida.println(toLog);
+                salida.println("");
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 }

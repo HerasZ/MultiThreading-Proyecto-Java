@@ -5,7 +5,7 @@
  */
 package Main;
 
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,20 +29,13 @@ public class Instructor extends Thread {
     public void run() {
 
         int coinFlip = (int) (0.5 + Math.random());
-
+        Entrance designatedEntrance;
         if (coinFlip == 0) {
-            if (!entrance1.getOpen()) {
-                entrance1.openDoors();
-                System.out.println("Door1 open");
-            }
-            entrance1.enterInstructor(this);
+            designatedEntrance = entrance1;
         } else {
-            if (!entrance2.getOpen()) {
-                entrance2.openDoors();
-                System.out.println("Door2 open");
-            }
-            entrance2.enterInstructor(this);
+            designatedEntrance = entrance2;
         }
+        designatedEntrance.enterInstructor(this);
 
     }
 

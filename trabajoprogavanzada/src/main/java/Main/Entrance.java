@@ -9,6 +9,7 @@ import static java.lang.Thread.sleep;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,12 +26,14 @@ public class Entrance {
     private CountDownLatch closedDoors = new CountDownLatch(1);
     private PrinterLogger UIPrinterLogger;
     private String doorID;
+    private ReentrantLock doorOpenLock;
 
     public Entrance(CommonArea newCommonArea, Semaphore newSemaphore, PrinterLogger UIPrinterLogger, String doorID) {
         this.commonArea = newCommonArea;
         this.campSemaphore = newSemaphore;
         this.UIPrinterLogger = UIPrinterLogger;
         this.doorID = doorID;
+        this.doorOpenLock = new ReentrantLock();
     }
 
     public void enterCamp(Children child) {
@@ -43,6 +46,7 @@ public class Entrance {
             Children nextChild = entranceQueue.poll();
             campSemaphore.acquire();
             UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
+            UIPrinterLogger.log(child.toString()+" enters through "+doorID);
             commonArea.enterChildren(nextChild);
         } catch (Exception e) {
         } finally {
@@ -51,6 +55,12 @@ public class Entrance {
     }
 
     public void enterInstructor(Instructor enteringInstructor) {
+        doorOpenLock.lock();
+        if (!this.open) {
+            openDoors();
+            System.out.println("XD");
+        }
+        doorOpenLock.unlock();
         commonArea.enterInstructor(enteringInstructor);
     }
 
