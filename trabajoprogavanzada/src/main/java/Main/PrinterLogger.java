@@ -25,13 +25,14 @@ import javax.swing.JTextArea;
  * @author Heras
  */
 public class PrinterLogger {
-
+    
+    private StopResume pausingMechanism;
     private JTextArea ropeInstructor, ropeQueue, snackChildren, snackClean, snackDirty, snackInstructors, snackQueue, teamA,
             teamB, zipFinishing, zipInstructor, zipPrepare, zipProgress, zipQueue, commonAreaChildren, commonAreaInstructor, entrance1, entrance2;
     private Semaphore UISemaphore = new Semaphore(1, true);
     private Semaphore LogSemaphore = new Semaphore(1,true);
 
-    public PrinterLogger(JTextArea ropeInstructor, JTextArea ropeQueue, JTextArea snackChildren, JTextArea snackClean, JTextArea snackDirty, JTextArea snackInstructors, JTextArea snackQueue, JTextArea teamA, JTextArea teamB, JTextArea zipFinishing, JTextArea zipInstructor, JTextArea zipPrepare, JTextArea zipProgress, JTextArea zipQueue, JTextArea commonAreaChildren, JTextArea commonAreaInstructor, JTextArea entrance1, JTextArea entrance2) {
+    public PrinterLogger(JTextArea ropeInstructor, JTextArea ropeQueue, JTextArea snackChildren, JTextArea snackClean, JTextArea snackDirty, JTextArea snackInstructors, JTextArea snackQueue, JTextArea teamA, JTextArea teamB, JTextArea zipFinishing, JTextArea zipInstructor, JTextArea zipPrepare, JTextArea zipProgress, JTextArea zipQueue, JTextArea commonAreaChildren, JTextArea commonAreaInstructor, JTextArea entrance1, JTextArea entrance2,StopResume newMechanism) {
         this.ropeInstructor = ropeInstructor;
         this.ropeQueue = ropeQueue;
         this.snackChildren = snackChildren;
@@ -50,11 +51,13 @@ public class PrinterLogger {
         this.commonAreaInstructor = commonAreaInstructor;
         this.entrance1 = entrance1;
         this.entrance2 = entrance2;
+        this.pausingMechanism = newMechanism;
         //Delete the previous log everytime we initialize the program
         new File("./Log/log.txt").delete();
     }
 
     public void setTextTo(String newString, String whereToSet) {
+        pausingMechanism.look();
         try {
             UISemaphore.acquire();
             switch (whereToSet) {
