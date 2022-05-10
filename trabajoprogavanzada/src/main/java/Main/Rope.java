@@ -36,7 +36,6 @@ public class Rope {
         gameDone = new CyclicBarrier(11);
         teamLimit = new Semaphore(10, true);
         this.UIPrinterLogger = UIPrinterLogger;
-
     }
 
     public void setCommonArea(CommonArea newCommonArea) {
@@ -117,11 +116,11 @@ public class Rope {
     public int assignTeam(Children child) {
         if (teamA.size() == 5 || teamB.size() == 5) {
             if (teamB.size() == 5) {
-                teamB.add(child);
-                return 1;
-            } else {
                 teamA.add(child);
                 return 0;
+            } else {
+                teamB.add(child);
+                return 1;
             }
         } else {
             int coinFlip = (int) (0.5 + Math.random());
@@ -133,6 +132,7 @@ public class Rope {
                 return 1;
             }
         }
+
     }
 
 }
