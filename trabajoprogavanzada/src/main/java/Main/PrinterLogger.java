@@ -29,6 +29,7 @@ public class PrinterLogger {
     private JTextArea ropeInstructor, ropeQueue, snackChildren, snackClean, snackDirty, snackInstructors, snackQueue, teamA,
             teamB, zipFinishing, zipInstructor, zipPrepare, zipProgress, zipQueue, commonAreaChildren, commonAreaInstructor, entrance1, entrance2;
     private Semaphore UISemaphore = new Semaphore(1, true);
+    private Semaphore LogSemaphore = new Semaphore(1,true);
 
     public PrinterLogger(JTextArea ropeInstructor, JTextArea ropeQueue, JTextArea snackChildren, JTextArea snackClean, JTextArea snackDirty, JTextArea snackInstructors, JTextArea snackQueue, JTextArea teamA, JTextArea teamB, JTextArea zipFinishing, JTextArea zipInstructor, JTextArea zipPrepare, JTextArea zipProgress, JTextArea zipQueue, JTextArea commonAreaChildren, JTextArea commonAreaInstructor, JTextArea entrance1, JTextArea entrance2) {
         this.ropeInstructor = ropeInstructor;
@@ -102,7 +103,8 @@ public class PrinterLogger {
 
     public void log(String toLog) {
         String rutaLog = "./Log/log.txt";
-        try {   
+        try {
+            LogSemaphore.acquire();
             File dirLog = new File("./Log");
 
             if (!dirLog.exists()) {
@@ -112,8 +114,9 @@ public class PrinterLogger {
             try ( BufferedWriter writerLog = new BufferedWriter(new FileWriter(rutaLog, true))) {
                writerLog.write(new Timestamp(Calendar.getInstance().getTime().getTime()) + " " + toLog);
                writerLog.newLine();
+               LogSemaphore.release();
             }
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             System.out.println(ex.getMessage());
         }
     }
