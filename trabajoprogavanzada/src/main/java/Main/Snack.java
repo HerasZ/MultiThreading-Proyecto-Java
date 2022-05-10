@@ -62,7 +62,6 @@ public class Snack {
             snackLock.unlock();
             cleanTrays.getAndDecrement();
             UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
-            System.out.println(newChild.getIdChild() + " on Snack");
             sleep(7000);
             dirtyTrays.getAndIncrement();
             UIPrinterLogger.setTextTo(Integer.toString(this.dirtyTrays.get()), "snackDirty");
@@ -90,7 +89,6 @@ public class Snack {
                     cleaningInstructor.resetBreakCountdown();
                     this.instructors.add(cleaningInstructor);
                     UIPrinterLogger.setTextTo(this.instructors.toString(), "snackInstructors");
-                    System.out.println(cleaningInstructor.getIdInst() + " break over");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
                 }

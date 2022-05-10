@@ -37,7 +37,7 @@ public class BeginCamp implements Runnable {
         for(int i = 1; i<5;i++) {
             new Instructor(i,entrance1,entrance2).start();
         }
-        for (int i = 1; i < 21; i++) {
+        for (int i = 1; i < 201; i++) {
             try {
                 sleep((int) (1000 + 2000 * Math.random()));
             } catch (InterruptedException ex) {
