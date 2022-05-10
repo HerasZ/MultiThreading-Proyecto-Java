@@ -6,8 +6,9 @@
 package Main;
 
 import static java.lang.Thread.sleep;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,11 +16,12 @@ import java.util.logging.Logger;
  *
  * @author Heras
  */
-public class BeginCamp implements Runnable {
-
+public class BeginCamp extends UnicastRemoteObject implements Runnable,ServerMethods {
+    
     private PrinterLogger UIPrinterLogger;
+    private Entrance entranceCampInsight;
 
-    public BeginCamp(PrinterLogger ui) {
+    public BeginCamp(PrinterLogger ui) throws RemoteException{
         this.UIPrinterLogger = ui;
     }
 
@@ -34,6 +36,7 @@ public class BeginCamp implements Runnable {
         Semaphore campSemaphore = new Semaphore(50, true);
         Entrance entrance1 = new Entrance(common, campSemaphore, UIPrinterLogger, "1");
         Entrance entrance2 = new Entrance(common, campSemaphore, UIPrinterLogger, "2");
+        this.entranceCampInsight = entrance1;
         for(int i = 1; i<5;i++) {
             new Instructor(i,entrance1,entrance2).start();
         }
@@ -47,6 +50,7 @@ public class BeginCamp implements Runnable {
         }
     }
 
+    @Override
     public void run() {
         startCamp();
     }
