@@ -59,13 +59,14 @@ public class Snack {
             while (cleanTrays.get() == 0) {
                 pileEmpty.await();
             }
-
+            snackLock.unlock();
             cleanTrays.getAndDecrement();
             UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
             System.out.println(newChild.getIdChild() + " on Snack");
             sleep(7000);
             dirtyTrays.getAndIncrement();
             UIPrinterLogger.setTextTo(Integer.toString(this.dirtyTrays.get()), "snackDirty");
+            snackLock.lock();
             pileFull.signal();
             snackLock.unlock();
         } catch (InterruptedException e) {
@@ -101,11 +102,13 @@ public class Snack {
                 while (dirtyTrays.get() == 0) {
                     pileFull.await();
                 }
+                snackLock.unlock();
                 dirtyTrays.getAndDecrement();
                 UIPrinterLogger.setTextTo(Integer.toString(this.dirtyTrays.get()), "snackDirty");
                 sleep((int) (3000 + 2000 * Math.random()));
                 cleanTrays.getAndIncrement();
                 UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
+                snackLock.lock();
                 pileEmpty.signal();
                 snackLock.unlock();
             } catch (InterruptedException ex) {
