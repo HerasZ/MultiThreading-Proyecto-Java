@@ -43,8 +43,8 @@ public class Entrance {
             while (!open) {
                 closedDoors.await();
             }
-            Children nextChild = entranceQueue.poll();
             campSemaphore.acquire();
+            Children nextChild = entranceQueue.poll();
             UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
             UIPrinterLogger.log(child.toString()+" enters through "+doorID);
             commonArea.enterChildren(nextChild);
@@ -58,7 +58,7 @@ public class Entrance {
         doorOpenLock.lock();
         if (!this.open) {
             openDoors();
-            System.out.println("XD");
+            
         }
         doorOpenLock.unlock();
         commonArea.enterInstructor(enteringInstructor);
