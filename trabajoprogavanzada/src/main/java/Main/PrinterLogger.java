@@ -10,7 +10,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -105,7 +106,7 @@ public class PrinterLogger {
             }
 
             try ( FileWriter fw = new FileWriter(rutaLog);  PrintWriter salida = new PrintWriter(new BufferedWriter(fw))) {
-                salida.println(toLog);
+                salida.println(new Timestamp(Calendar.getInstance().getTime().getTime()) + " " + toLog);
                 salida.println("");
             }
         } catch (IOException ex) {

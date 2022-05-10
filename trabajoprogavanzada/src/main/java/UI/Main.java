@@ -103,12 +103,14 @@ public class Main extends javax.swing.JFrame {
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
+        entrance1.setEditable(false);
         entrance1.setColumns(20);
         entrance1.setRows(5);
         jScrollPane1.setViewportView(entrance1);
 
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
+        entrance2.setEditable(false);
         entrance2.setColumns(20);
         entrance2.setRows(5);
         jScrollPane2.setViewportView(entrance2);
@@ -250,7 +252,6 @@ public class Main extends javax.swing.JFrame {
         ropeInstructor.setRows(5);
         jScrollPane11.setViewportView(ropeInstructor);
 
-        jScrollPane12.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane12.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         teamA.setEditable(false);
@@ -260,7 +261,6 @@ public class Main extends javax.swing.JFrame {
 
         jLabel12.setText("Team A");
 
-        jScrollPane13.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane13.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         teamB.setEditable(false);

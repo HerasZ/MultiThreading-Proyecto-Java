@@ -46,7 +46,7 @@ public class Entrance {
             campSemaphore.acquire();
             Children nextChild = entranceQueue.poll();
             UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
-            UIPrinterLogger.log(child.toString()+" enters through "+doorID);
+            UIPrinterLogger.log(child.toString() + " enters through entrance " + doorID);
             commonArea.enterChildren(nextChild);
         } catch (Exception e) {
         } finally {
@@ -58,7 +58,7 @@ public class Entrance {
         doorOpenLock.lock();
         if (!this.open) {
             openDoors();
-            
+            UIPrinterLogger.log(enteringInstructor.toString() + " opens entrance " + doorID);
         }
         doorOpenLock.unlock();
         commonArea.enterInstructor(enteringInstructor);
