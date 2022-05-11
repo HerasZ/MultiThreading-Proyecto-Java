@@ -121,4 +121,8 @@ public class Snack {
         cleanTrays(newInstructor);
     }
 
+    public LinkedBlockingQueue<Children> getSnackQueue() {
+        return snackQueue;
+    }
+
 }

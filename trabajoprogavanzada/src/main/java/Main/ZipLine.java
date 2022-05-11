@@ -105,4 +105,8 @@ public class ZipLine {
         UIPrinterLogger.setTextTo(this.zipInstructor.getIdInst(), "zipInstructor");
         waitZipLine();
     }
+
+    public LinkedBlockingQueue<Children> getZipQueue() {
+        return zipQueue;
+    }
 }

@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  *
  * @author Heras
  */
-public class BeginCamp extends UnicastRemoteObject implements Runnable,ServerMethods {
-    
+public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMethods {
+
     private PrinterLogger UIPrinterLogger;
     private Entrance entranceCampInsight;
 
-    public BeginCamp(PrinterLogger ui) throws RemoteException{
+    public BeginCamp(PrinterLogger ui) throws RemoteException {
         this.UIPrinterLogger = ui;
     }
 
@@ -37,8 +37,8 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable,ServerMet
         Entrance entrance1 = new Entrance(common, campSemaphore, UIPrinterLogger, "1");
         Entrance entrance2 = new Entrance(common, campSemaphore, UIPrinterLogger, "2");
         this.entranceCampInsight = entrance1;
-        for(int i = 1; i<5;i++) {
-            new Instructor(i,entrance1,entrance2).start();
+        for (int i = 1; i < 5; i++) {
+            new Instructor(i, entrance1, entrance2).start();
         }
         for (int i = 1; i < 201; i++) {
             try {
@@ -53,5 +53,38 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable,ServerMet
     @Override
     public void run() {
         startCamp();
+    }
+
+    @Override
+    public int getZipQueue() {
+        return entranceCampInsight.getCommonArea().getZiplineActivity().getZipQueue().size();
+    }
+
+    public int getRopeQueue() {
+        return entranceCampInsight.getCommonArea().getRopeActivity().getRopeQueue().size();
+    }
+
+    public int getSnackQueue() {
+        return entranceCampInsight.getCommonArea().getRopeActivity().getRopeQueue().size();
+    }
+
+    @Override
+    public int getZipUses() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getDirtyTrays() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getCleanTrays() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getActivitiesChild(String ChildID) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

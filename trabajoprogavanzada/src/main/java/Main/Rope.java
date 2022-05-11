@@ -135,4 +135,8 @@ public class Rope {
 
     }
 
+    public LinkedBlockingQueue<Children> getRopeQueue() {
+        return ropeQueue;
+    }
+
 }

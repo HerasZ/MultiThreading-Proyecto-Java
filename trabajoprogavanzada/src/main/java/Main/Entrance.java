@@ -77,4 +77,8 @@ public class Entrance {
     public boolean getOpen() {
         return open;
     }
+
+    public CommonArea getCommonArea() {
+        return commonArea;
+    }
 }

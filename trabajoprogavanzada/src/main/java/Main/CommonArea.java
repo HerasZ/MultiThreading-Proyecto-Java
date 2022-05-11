@@ -88,4 +88,17 @@ public class CommonArea {
         this.commonAreaInstructors.remove(onBreak);
         UIPrinterLogger.setTextTo(commonAreaInstructors.toString(), "commonAreaInstructor");
     }
+
+    public ZipLine getZiplineActivity() {
+        return ziplineActivity;
+    }
+
+    public Rope getRopeActivity() {
+        return ropeActivity;
+    }
+
+    public Snack getSnackActivity() {
+        return snackActivity;
+    }
+    
 }
