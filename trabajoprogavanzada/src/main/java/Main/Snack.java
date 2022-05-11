@@ -125,4 +125,12 @@ public class Snack {
         return snackQueue;
     }
 
+    public AtomicInteger getCleanTrays() {
+        return cleanTrays;
+    }
+
+    public AtomicInteger getDirtyTrays() {
+        return dirtyTrays;
+    }
+
 }

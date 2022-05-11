@@ -8,6 +8,7 @@ package Main;
 import static java.lang.Thread.sleep;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
 
     private PrinterLogger UIPrinterLogger;
     private Entrance entranceCampInsight;
+    private ArrayList<Children> threads = new ArrayList<Children>();
 
     public BeginCamp(PrinterLogger ui) throws RemoteException {
         this.UIPrinterLogger = ui;
@@ -46,7 +48,9 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
             } catch (InterruptedException ex) {
                 Logger.getLogger(BeginCamp.class.getName()).log(Level.SEVERE, null, ex);
             }
-            new Children(i, entrance1, entrance2).start();
+            Children newKid = new Children(i, entrance1, entrance2);
+            threads.add(newKid);
+            newKid.start();
         }
     }
 
@@ -70,21 +74,26 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
 
     @Override
     public int getZipUses() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return entranceCampInsight.getCommonArea().getZiplineActivity().getTimesUsed();
     }
 
     @Override
     public int getDirtyTrays() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return entranceCampInsight.getCommonArea().getSnackActivity().getDirtyTrays().get();
     }
 
     @Override
     public int getCleanTrays() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return entranceCampInsight.getCommonArea().getSnackActivity().getCleanTrays().get();
     }
 
     @Override
     public int getActivitiesChild(String ChildID) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = 0; i<threads.size();i++) {
+            if (ChildID == threads.get(i).getIdChild()) {
+                return 15-threads.get(i).getActivitiesLeft();
+            }
+        }
+        return -1;
     }
 }

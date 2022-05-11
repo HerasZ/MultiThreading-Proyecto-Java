@@ -9,7 +9,6 @@ import static java.lang.Thread.sleep;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +26,7 @@ public class ZipLine {
     private CyclicBarrier childrenDone;
     private Instructor zipInstructor;
     private PrinterLogger UIPrinterLogger;
+    private int timesUsed = 0;
 
     public ZipLine(PrinterLogger UIPrinterLogger) {
         zipLock = new ReentrantLock(true);
@@ -61,6 +61,7 @@ public class ZipLine {
             sleep(500);
             UIPrinterLogger.setTextTo("", "zipFinishing");
             //Let the Instructor know we are done
+            timesUsed++;
             childrenDone.await();
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,5 +109,9 @@ public class ZipLine {
 
     public LinkedBlockingQueue<Children> getZipQueue() {
         return zipQueue;
+    }
+
+    public int getTimesUsed() {
+        return timesUsed;
     }
 }
