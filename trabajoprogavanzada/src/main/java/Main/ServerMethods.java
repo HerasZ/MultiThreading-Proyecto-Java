@@ -5,13 +5,14 @@
  */
 package Main;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
  *
  * @author Heras
  */
-public interface ServerMethods {
+public interface ServerMethods extends Remote {
 
     public int getZipQueue() throws RemoteException;
 

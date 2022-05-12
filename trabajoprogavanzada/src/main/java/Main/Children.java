@@ -50,8 +50,11 @@ public class Children extends Thread {
     public int getActivitiesLeft() {
         return activitiesLeft;
     }
-    public void lowerActivitiesLeft() {
-        this.activitiesLeft -=1;
+    public void lowerActivitiesLeft(int amount) {
+        this.activitiesLeft -=amount;
+        if (this.activitiesLeft < 0) {
+            this.activitiesLeft = 0;
+        }
     }
 
     public String getIdChild() {

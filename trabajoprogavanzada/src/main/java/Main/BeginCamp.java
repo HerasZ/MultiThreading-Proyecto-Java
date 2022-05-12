@@ -69,7 +69,7 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
     }
 
     public int getSnackQueue() {
-        return entranceCampInsight.getCommonArea().getRopeActivity().getRopeQueue().size();
+        return entranceCampInsight.getCommonArea().getSnackActivity().getEatingZone().size();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
     @Override
     public int getActivitiesChild(String ChildID) throws RemoteException {
         for (int i = 0; i<threads.size();i++) {
-            if (ChildID == threads.get(i).getIdChild()) {
+            if (ChildID.equals(threads.get(i).getIdChild())) {
                 return 15-threads.get(i).getActivitiesLeft();
             }
         }

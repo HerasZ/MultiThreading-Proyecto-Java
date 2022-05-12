@@ -7,6 +7,7 @@ package UI;
 
 import Main.BeginCamp;
 import Main.PrinterLogger;
+import Main.Server;
 import Main.StopResume;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -20,15 +21,20 @@ public class Main extends javax.swing.JFrame {
 
     private PrinterLogger printer;
     private StopResume pause;
+    private Server remoteServer;
 
     public Main() {
         initComponents();
         this.pause = new StopResume();
+        this.remoteServer = new Server();
         this.printer = new PrinterLogger(ropeInstructor, ropeQueue, snackChildren, snackClean, snackDirty, snackInstructors, snackQueue, teamA, teamB, zipFinishing, zipInstructor, zipPrepare, zipProgress, zipQueue, commonAreaChildren, commonAreaInstructor, entrance1, entrance2, pause);
         Thread t;
+        
         try {
-            t = new Thread(new BeginCamp(printer));
+            BeginCamp campStartPoint = new BeginCamp(printer);
+            t = new Thread(campStartPoint);
             t.start();
+            remoteServer.bootServer(campStartPoint);
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

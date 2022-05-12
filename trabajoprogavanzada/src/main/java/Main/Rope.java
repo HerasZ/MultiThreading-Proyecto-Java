@@ -59,8 +59,10 @@ public class Rope {
             sleep(7000);
             if (assignedTeam == this.winningTeam) {
                 newChild.lowerSnackCountdown(2);
+                newChild.lowerActivitiesLeft(2);
             } else {
                 newChild.lowerSnackCountdown(1);
+                newChild.lowerActivitiesLeft(1);
             }
             gameDone.await();
             UIPrinterLogger.setTextTo("", "teamA");
@@ -68,7 +70,6 @@ public class Rope {
         } catch (InterruptedException | BrokenBarrierException ex) {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-
             teamLimit.release();
         }
 

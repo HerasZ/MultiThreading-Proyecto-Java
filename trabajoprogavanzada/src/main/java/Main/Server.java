@@ -15,13 +15,7 @@ import java.rmi.registry.Registry;
  */
 public class Server {
 
-    private BeginCamp campAccess;
-
-    public Server(BeginCamp campAcc) {
-        this.campAccess = campAcc;
-    }
-
-    public void server() {
+    public void bootServer(BeginCamp campAccess) {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
             Naming.rebind("//localhost/camp", campAccess);

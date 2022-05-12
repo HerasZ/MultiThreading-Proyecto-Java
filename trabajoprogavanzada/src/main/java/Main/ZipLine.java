@@ -44,8 +44,8 @@ public class ZipLine {
         zipQueue.add(newChild);
         UIPrinterLogger.setTextTo(this.zipQueue.toString(), "zipQueue");
         zipLock.lock();
-        zipQueue.remove(newChild);
         try {
+            zipQueue.remove(newChild);
             UIPrinterLogger.setTextTo(this.zipQueue.toString(), "zipQueue");
             childrenReady.await();
             //Getting ready
@@ -67,7 +67,7 @@ public class ZipLine {
             Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             zipLock.unlock();
-            newChild.lowerActivitiesLeft();
+            newChild.lowerActivitiesLeft(1);
         }
 
     }
