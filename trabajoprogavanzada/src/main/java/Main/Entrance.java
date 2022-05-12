@@ -48,6 +48,7 @@ public class Entrance {
             UIPrinterLogger.setTextTo(entranceQueue.toString(), "entrance" + doorID);
             UIPrinterLogger.log(child.toString() + " enters through entrance " + doorID);
             commonArea.enterChildren(nextChild);
+            UIPrinterLogger.log(child.toString() + " leaves camp");
         } catch (Exception e) {
         } finally {
             campSemaphore.release();

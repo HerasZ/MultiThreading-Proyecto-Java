@@ -36,6 +36,7 @@ public class CommonArea {
         while (newChild.getActivitiesLeft() != 0) {
             commonAreaChildren.add(newChild);
             UIPrinterLogger.setTextTo(commonAreaChildren.toString(), "commonAreaChildren");
+            UIPrinterLogger.log(newChild.toString() + " on the common area");
             try {
                 //Decide on activity
                 sleep((int) (2000 + 2000 * Math.random()));
@@ -100,5 +101,5 @@ public class CommonArea {
     public Snack getSnackActivity() {
         return snackActivity;
     }
-    
+
 }

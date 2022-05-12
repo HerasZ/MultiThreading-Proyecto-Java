@@ -55,6 +55,7 @@ public class Snack {
             UIPrinterLogger.setTextTo(this.snackQueue.toString(), "snackQueue");
             eatingZone.add(newChild);
             UIPrinterLogger.setTextTo(this.eatingZone.toString(), "snackChildren");
+            UIPrinterLogger.log(newChild.toString() + " is eating on Snacks");
             snackLock.lock();
             while (cleanTrays.get() == 0) {
                 pileEmpty.await();
@@ -83,12 +84,14 @@ public class Snack {
                 try {
                     this.instructors.remove(cleaningInstructor);
                     UIPrinterLogger.setTextTo(this.instructors.toString(), "snackInstructors");
+                    UIPrinterLogger.log(cleaningInstructor.toString() + " takes his break");
                     commonArea.instructorBreakBegin(cleaningInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(cleaningInstructor);
                     cleaningInstructor.resetBreakCountdown();
                     this.instructors.add(cleaningInstructor);
                     UIPrinterLogger.setTextTo(this.instructors.toString(), "snackInstructors");
+                    UIPrinterLogger.log(cleaningInstructor.toString() + "'s break is over");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -106,6 +109,7 @@ public class Snack {
                 sleep((int) (3000 + 2000 * Math.random()));
                 cleanTrays.getAndIncrement();
                 UIPrinterLogger.setTextTo(Integer.toString(this.cleanTrays.get()), "snackClean");
+                UIPrinterLogger.log(cleaningInstructor.toString() + " cleans a tray");
                 snackLock.lock();
                 pileEmpty.signal();
                 snackLock.unlock();

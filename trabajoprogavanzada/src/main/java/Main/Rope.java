@@ -10,7 +10,6 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,6 +51,8 @@ public class Rope {
             //Wait until both teams are formed
             teamsReady.await();
             ropeQueue.remove(newChild);
+
+            //Update UI
             UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
             UIPrinterLogger.setTextTo(this.teamA.toString(), "teamA");
             UIPrinterLogger.setTextTo(this.teamB.toString(), "teamB");
@@ -81,11 +82,13 @@ public class Rope {
                 //INSTRUCTOR TAKES HIS BREAK
                 try {
                     UIPrinterLogger.setTextTo("", "ropeInstructor");
+                    UIPrinterLogger.log(ropeInstructor.toString() + " takes his break");
                     commonArea.instructorBreakBegin(ropeInstructor);
                     sleep((int) (1000 + 1000 * Math.random()));
                     commonArea.instructorBreakOver(ropeInstructor);
                     ropeInstructor.resetBreakCountdown();
                     UIPrinterLogger.setTextTo(ropeInstructor.getIdInst(), "ropeInstructor");
+                    UIPrinterLogger.log(ropeInstructor.toString() + "'s break is over");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -95,10 +98,23 @@ public class Rope {
             try {
                 //Wait for the teams to form
                 teamsReady.await();
+                
+                //Log the teams
+                UIPrinterLogger.log(this.teamA.toString() + " are teamA on rope");
+                UIPrinterLogger.log(this.teamB.toString() + " are teamB on rope");
+
                 //Choose one team as a winner randomly
                 this.winningTeam = (int) (0.5 + Math.random());
+
                 //Clear the teams after the game ends
                 gameDone.await();
+
+                //Log the winners of the game
+                if (this.winningTeam == 0) {
+                    UIPrinterLogger.log(this.teamA.toString() + " win at rope");
+                } else {
+                    UIPrinterLogger.log(this.teamB.toString() + " win at rope");
+                }
                 this.teamA.clear();
                 this.teamB.clear();
             } catch (BrokenBarrierException | InterruptedException ex) {
