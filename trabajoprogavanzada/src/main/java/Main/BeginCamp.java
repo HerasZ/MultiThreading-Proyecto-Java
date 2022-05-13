@@ -64,10 +64,12 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
         return entranceCampInsight.getCommonArea().getZiplineActivity().getZipQueue().size();
     }
 
+    @Override
     public int getRopeQueue() {
         return entranceCampInsight.getCommonArea().getRopeActivity().getRopeQueue().size();
     }
 
+    @Override
     public int getSnackQueue() {
         return entranceCampInsight.getCommonArea().getSnackActivity().getEatingZone().size();
     }

@@ -56,8 +56,10 @@ public class Rope {
             UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
             UIPrinterLogger.setTextTo(this.teamA.toString(), "teamA");
             UIPrinterLogger.setTextTo(this.teamB.toString(), "teamB");
+
             //Rope activity taking place
-            sleep(7000);
+            sleep(7000);    
+
             if (assignedTeam == this.winningTeam) {
                 newChild.lowerSnackCountdown(2);
                 newChild.lowerActivitiesLeft(2);
@@ -98,7 +100,7 @@ public class Rope {
             try {
                 //Wait for the teams to form
                 teamsReady.await();
-                
+
                 //Log the teams
                 UIPrinterLogger.log(this.teamA.toString() + " are teamA on rope");
                 UIPrinterLogger.log(this.teamB.toString() + " are teamB on rope");

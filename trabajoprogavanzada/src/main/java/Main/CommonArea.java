@@ -7,8 +7,7 @@ package Main;
 
 import static java.lang.Thread.sleep;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
+    import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,7 +18,6 @@ public class CommonArea {
 
     private LinkedBlockingQueue<Children> commonAreaChildren = new LinkedBlockingQueue<Children>();
     private LinkedBlockingQueue<Instructor> commonAreaInstructors = new LinkedBlockingQueue<Instructor>();
-    private ReentrantLock instructorBreakLock = new ReentrantLock(true);
     private ZipLine ziplineActivity;
     private Rope ropeActivity;
     private Snack snackActivity;

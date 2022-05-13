@@ -53,7 +53,7 @@ public class Children extends Thread {
     public void lowerActivitiesLeft(int amount) {
         this.activitiesLeft -=amount;
         if (this.activitiesLeft < 0) {
-            this.activitiesLeft = 0;
+            this.activitiesLeft = 0;    
         }
     }
 
