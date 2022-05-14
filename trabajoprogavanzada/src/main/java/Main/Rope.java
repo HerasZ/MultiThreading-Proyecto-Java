@@ -10,6 +10,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,36 +45,47 @@ public class Rope {
     public void useRope(Children newChild) {
         ropeQueue.add(newChild);
         UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
+
         try {
-            //Go into the pre-match status
-            teamLimit.acquire();
-            int assignedTeam = assignTeam(newChild);
-            //Wait until both teams are formed
-            teamsReady.await();
-            ropeQueue.remove(newChild);
+            //If there is no more room to wait for a game, the child will leave after 1 second
+            if (teamLimit.tryAcquire(1, TimeUnit.SECONDS)) {
+                try {
+                    //Go into the pre-match status
 
-            //Update UI
-            UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
-            UIPrinterLogger.setTextTo(this.teamA.toString(), "teamA");
-            UIPrinterLogger.setTextTo(this.teamB.toString(), "teamB");
+                    int assignedTeam = assignTeam(newChild);
+                    //Wait until both teams are formed
+                    teamsReady.await();
+                    ropeQueue.remove(newChild);
 
-            //Rope activity taking place
-            sleep(7000);    
+                    //Update UI
+                    UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
+                    UIPrinterLogger.setTextTo(this.teamA.toString(), "teamA");
+                    UIPrinterLogger.setTextTo(this.teamB.toString(), "teamB");
 
-            if (assignedTeam == this.winningTeam) {
-                newChild.lowerSnackCountdown(2);
-                newChild.lowerActivitiesLeft(2);
+                    //Rope activity taking place
+                    sleep(7000);
+
+                    if (assignedTeam == this.winningTeam) {
+                        newChild.lowerSnackCountdown(2);
+                        newChild.lowerActivitiesLeft(2);
+                    } else {
+                        newChild.lowerSnackCountdown(1);
+                        newChild.lowerActivitiesLeft(1);
+                    }
+                    gameDone.await();
+                    UIPrinterLogger.setTextTo("", "teamA");
+                    UIPrinterLogger.setTextTo("", "teamB");
+                } catch (InterruptedException | BrokenBarrierException ex) {
+                    Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    teamLimit.release();
+                }
             } else {
-                newChild.lowerSnackCountdown(1);
-                newChild.lowerActivitiesLeft(1);
+                ropeQueue.remove(newChild);
+                UIPrinterLogger.setTextTo(this.ropeQueue.toString(), "ropeQueue");
             }
-            gameDone.await();
-            UIPrinterLogger.setTextTo("", "teamA");
-            UIPrinterLogger.setTextTo("", "teamB");
-        } catch (InterruptedException | BrokenBarrierException ex) {
-            Logger.getLogger(ZipLine.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            teamLimit.release();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Rope.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
