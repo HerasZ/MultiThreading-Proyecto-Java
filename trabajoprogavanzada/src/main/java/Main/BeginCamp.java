@@ -42,7 +42,9 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
         for (int i = 1; i < 5; i++) {
             new Instructor(i, entrance1, entrance2).start();
         }
-        for (int i = 1; i < 201; i++) {
+        for (int i = 1; i < 20001; i++) {
+            //Pause the generation of kids if the stop button has been pressed
+            UIPrinterLogger.getPausingMechanism().look();
             try {
                 sleep((int) (1000 + 2000 * Math.random()));
             } catch (InterruptedException ex) {

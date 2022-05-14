@@ -119,4 +119,8 @@ public class PrinterLogger {
             System.out.println(ex.getMessage());
         }
     }
+
+    public StopResume getPausingMechanism() {
+        return pausingMechanism;
+    }
 }
