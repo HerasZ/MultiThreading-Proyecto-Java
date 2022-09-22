@@ -2,7 +2,7 @@ package Main;
 
 import static java.lang.Thread.sleep;
 import java.util.concurrent.LinkedBlockingQueue;
-    import java.util.logging.Level;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CommonArea {

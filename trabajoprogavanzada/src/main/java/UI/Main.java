@@ -13,6 +13,8 @@ public class Main extends javax.swing.JFrame {
     private PrinterLogger printer;
     private StopResume pause;
     private Server remoteServer;
+    private BeginCamp campStartPoint;
+    private Thread childSpawner;
 
     public Main() {
         initComponents();
@@ -22,9 +24,9 @@ public class Main extends javax.swing.JFrame {
         Thread t;
         
         try {
-            BeginCamp campStartPoint = new BeginCamp(printer);
-            t = new Thread(campStartPoint);
-            t.start();
+            this.campStartPoint = new BeginCamp(printer);
+            this.childSpawner = new Thread(campStartPoint);
+            childSpawner.start();
             remoteServer.bootServer(campStartPoint);
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,6 +107,7 @@ public class Main extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         stopButton = new javax.swing.JButton();
         resumeButton = new javax.swing.JButton();
+        endButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -532,6 +535,15 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        endButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endButton.setForeground(new java.awt.Color(153, 0, 0));
+        endButton.setText("END ALL");
+        endButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                endButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -550,10 +562,16 @@ public class Main extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 533, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(resumeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(resumeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(endButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(43, 43, 43))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 60, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -586,9 +604,12 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(stopButton)
-                        .addComponent(resumeButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(stopButton)
+                            .addComponent(resumeButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(endButton)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -602,6 +623,11 @@ public class Main extends javax.swing.JFrame {
     private void resumeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resumeButtonMouseClicked
         this.pause.open();
     }//GEN-LAST:event_resumeButtonMouseClicked
+
+    private void endButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_endButtonMouseClicked
+        childSpawner.interrupt();
+        campStartPoint.endCamp();
+    }//GEN-LAST:event_endButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -641,6 +667,7 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea commonAreaChildren;
     private javax.swing.JTextArea commonAreaInstructor;
+    private javax.swing.JButton endButton;
     private javax.swing.JTextArea entrance1;
     private javax.swing.JTextArea entrance2;
     private javax.swing.JLabel jLabel1;

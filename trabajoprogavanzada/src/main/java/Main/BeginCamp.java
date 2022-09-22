@@ -39,7 +39,7 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
             try {
                 sleep((int) (1000 + 2000 * Math.random()));
             } catch (InterruptedException ex) {
-                Logger.getLogger(BeginCamp.class.getName()).log(Level.SEVERE, null, ex);
+                break;
             }
             Children newKid = new Children(i, entrance1, entrance2);
             threads.add(newKid);
@@ -50,6 +50,12 @@ public class BeginCamp extends UnicastRemoteObject implements Runnable, ServerMe
     @Override
     public void run() {
         startCamp();
+    }
+    
+    public void endCamp() {
+        for (int i = 0;i< threads.size();i++) {
+            threads.get(i).lowerActivitiesLeft(15);
+        }
     }
 
     @Override
